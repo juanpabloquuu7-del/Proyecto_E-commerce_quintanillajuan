@@ -14,8 +14,7 @@
  *   }));
  */
 
-import bus, { EVENTS } from "../core/events.js";
-
+import { bus, EVENTS } from "../core/events.js";
 // ─── Constantes ────────────────────────────────────────────────────────────────
 
 const TAG_NAME = "lumiere-toast";
