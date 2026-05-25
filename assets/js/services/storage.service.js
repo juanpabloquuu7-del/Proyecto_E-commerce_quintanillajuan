@@ -723,3 +723,7 @@ export {
   NAMESPACE,
   sessionStorage_ as sessionStorage,
 };
+
+// Añadir al final de storage.service.js
+export { storage, sessionStorage_ };
+export default storage;
