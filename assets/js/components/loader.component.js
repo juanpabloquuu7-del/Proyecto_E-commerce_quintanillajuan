@@ -4,16 +4,17 @@
  * Shadow DOM · Animación CSS pura · Show/hide API · Integración store/bus.
  *
  * Uso programático:
- *   import LoaderComponent from './loader.component.js';
- *   LoaderComponent.show();
- *   LoaderComponent.show('Procesando pedido…');
- *   LoaderComponent.hide();
+ * import LoaderComponent from './loader.component.js';
+ * LoaderComponent.show();
+ * LoaderComponent.show('Procesando pedido…');
+ * LoaderComponent.hide();
  *
  * Vía evento global:
- *   window.dispatchEvent(new CustomEvent('lumiere:loader', { detail: { visible: true } }));
+ * window.dispatchEvent(new CustomEvent('lumiere:loader', { detail: { visible: true } }));
  */
 
-import { bus, EVENTS } from "../core/events.js";
+import bus, { EVENTS } from "../core/events.js";
+
 // ─── Constantes ────────────────────────────────────────────────────────────────
 
 const TAG_NAME = "lumiere-loader";
@@ -274,17 +275,21 @@ class LumiereLoader extends HTMLElement {
   // ── Lifecycle ──────────────────────────────────────────────────────────────
 
   connectedCallback() {
-    this._busCtx = bus.context?.("LoaderComponent") ?? null;
+    // Inicialización segura del contexto del bus si está disponible en events.js
+    this._busCtx =
+      typeof bus.context === "function" ? bus.context("LoaderComponent") : null;
 
-    // Escucha eventos del bus (emitidos por router/services)
-    if (EVENTS.UI_LOADING_START)
+    // Escucha eventos del bus (emitidos por el router o servicios del core)
+    if (EVENTS.UI_LOADING_START) {
       bus.on(EVENTS.UI_LOADING_START, ({ message } = {}) =>
         this._show(message),
       );
-    if (EVENTS.UI_LOADING_END)
+    }
+    if (EVENTS.UI_LOADING_END) {
       bus.on(EVENTS.UI_LOADING_END, () => this._hide());
+    }
 
-    // CustomEvent global (bridge)
+    // CustomEvent global (bridge para scripts sin acceso a módulos de ES)
     this._onWindow = ({ detail = {} }) => {
       if (detail.visible === false) this._hide();
       else this._show(detail.message ?? "");
@@ -294,7 +299,14 @@ class LumiereLoader extends HTMLElement {
 
   disconnectedCallback() {
     window.removeEventListener("lumiere:loader", this._onWindow);
-    this._busCtx?.destroy?.();
+
+    // Limpieza segura de suscripciones para evitar fugas de memoria
+    if (this._busCtx && typeof this._busCtx.destroy === "function") {
+      this._busCtx.destroy();
+    } else if (typeof bus.off === "function") {
+      if (EVENTS.UI_LOADING_START) bus.off(EVENTS.UI_LOADING_START);
+      if (EVENTS.UI_LOADING_END) bus.off(EVENTS.UI_LOADING_END);
+    }
   }
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -303,7 +315,6 @@ class LumiereLoader extends HTMLElement {
     this._shadow.innerHTML = `
       <style>${STYLES}</style>
 
-      <!-- Overlay completo (modo normal) -->
       <div class="overlay" part="overlay" aria-hidden="true" aria-live="polite" aria-label="Cargando">
         <div class="particles">${buildParticles()}</div>
 
@@ -325,7 +336,6 @@ class LumiereLoader extends HTMLElement {
         <p class="message"></p>
       </div>
 
-      <!-- Spinner compacto (modo inline) -->
       <div class="spinner-wrap" part="spinner" aria-hidden="true">
         <div class="spinner"></div>
       </div>
@@ -385,12 +395,6 @@ function getHost() {
 
 /**
  * API estática para controlar el loader sin importar el elemento.
- *
- * @example
- * LoaderComponent.show();
- * LoaderComponent.show('Procesando pedido…');
- * LoaderComponent.showCompact();
- * LoaderComponent.hide();
  */
 const LoaderComponent = {
   /**
