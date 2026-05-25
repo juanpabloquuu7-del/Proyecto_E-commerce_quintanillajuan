@@ -151,10 +151,19 @@
   </main>
 
   <!-- FOOTER -->
-  <footer id="site-footer" role="contentinfo" class="bg-primary text-cream" aria-label="Pie de página">
+  <!-- ═══════════════════════════════════════════
+       FOOTER CORREGIDO
+  ═══════════════════════════════════════════ -->
+  <footer id="site-footer"
+          role="contentinfo"
+          class="bg-primary text-cream"
+          aria-label="Pie de página">
+
     <div class="container mx-auto py-16 px-4">
+
       <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
 
+        <!-- Brand -->
         <div class="flex flex-col gap-4">
           <div>
             <p class="font-display text-3xl font-light tracking-widest text-white">LUMIÈRE</p>
@@ -165,23 +174,38 @@
           </p>
         </div>
 
+        <!-- Links: Colecciones -->
         <nav aria-label="Colecciones">
           <h3 class="text-xs font-medium tracking-widest uppercase text-accent mb-5">Colecciones</h3>
           <ul class="flex flex-col gap-3" role="list">
-            <li><a href="#/catalog" data-route="/catalog" class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">Ver Catálogo Completo</a></li>
-            <li><a href="#/catalog?category=mujer" data-route="/catalog?category=mujer" class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">Mujer</a></li>
-            <li><a href="#/catalog?category=hombre" data-route="/catalog?category=hombre" class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">Hombre</a></li>
+            <li><a href="#" data-route="/catalog"
+                   class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">
+                Ver Catálogo Completo</a></li>
+            <li><a href="#" data-route="/catalog?category=mujer"
+                   class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">
+                Mujer</a></li>
+            <li><a href="#" data-route="/catalog?category=hombre"
+                   class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">
+                Hombre</a></li>
           </ul>
         </nav>
 
-        <!-- AQUI ESTÁN LOS ENLACES A TUS NUEVAS RUTAS -->
+        <!-- Links: Ayuda & Cuenta (Aquí corregimos los data-route limpios) -->
         <nav aria-label="Ayuda y Cuenta">
           <h3 class="text-xs font-medium tracking-widest uppercase text-accent mb-5">Ayuda & Cuenta</h3>
           <ul class="flex flex-col gap-3" role="list">
-            <li><a href="#/cart" data-route="/cart" class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">Tu Bolsa de Compra</a></li>
-            <li><a href="#/checkout" data-route="/checkout" class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">Finalizar Pedido</a></li>
-            <li><a href="#/orders" data-route="/orders" class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">Mis Pedidos</a></li>
-            <li><a href="#" class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">Contacto</a></li>
+            <li><a href="#" data-route="/cart"
+                   class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">
+                Tu Bolsa de Compra</a></li>
+            <li><a href="#" data-route="/checkout"
+                   class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">
+                Finalizar Pedido</a></li>
+            <li><a href="#" data-route="/orders"
+                   class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">
+                Mis Pedidos</a></li>
+            <li><a href="#"
+                   class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">
+                Contacto</a></li>
           </ul>
         </nav>
 
@@ -191,7 +215,9 @@
           <form id="newsletter-form" class="flex flex-col gap-3" novalidate aria-label="Suscripción al newsletter">
             <div class="form-group">
               <label for="newsletter-email" class="sr-only">Correo electrónico</label>
-              <input type="email" id="newsletter-email" required placeholder="tu@correo.com" class="form-input bg-transparent border-gray-700 text-white placeholder-gray-600 focus:border-accent text-sm" style="border-color: rgba(255,255,255,0.15); color: #faf8f5;" />
+              <input type="email" id="newsletter-email" required placeholder="tu@correo.com"
+                     class="form-input bg-transparent border-gray-700 text-white placeholder-gray-600 focus:border-accent text-sm"
+                     style="border-color: rgba(255,255,255,0.15); color: #faf8f5;" />
             </div>
             <button type="submit" class="btn btn-accent btn-sm w-full">Suscribirme</button>
           </form>
@@ -200,34 +226,31 @@
 
       </div>
 
+      <!-- Bottom bar -->
       <div class="divider mt-12 mb-8" style="background-color: rgba(255,255,255,0.08);"></div>
       <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p class="text-xs text-gray-600">&copy; <span id="footer-year"></span> LUMIÈRE Fashion. Todos los derechos reservados.</p>
+        <p class="text-xs text-gray-600">
+          &copy; <span id="footer-year"></span> LUMIÈRE Fashion. Todos los derechos reservados.
+        </p>
       </div>
+
     </div>
   </footer>
 
-<script type="module" src="./js/app.js"></script>
-  <script>
-    document.getElementById('footer-year').textContent = new Date().getFullYear();
-    const loaderFallback = setTimeout(() => {
-      const loader = document.getElementById('page-loader');
-      if (loader) {
-        loader.style.opacity = '0';
-        loader.style.visibility = 'hidden';
-      }
-    }, 5000);
-    window.__clearLoaderFallback = () => clearTimeout(loaderFallback);
+<script>
+        document.getElementById('site-footer')?.addEventListener('click', function (e) {
+            const link = e.target.closest('[data-route]');
+            if (link) {
+                e.preventDefault();
+                const route = link.dataset.route;
+                
+                // Cambia la URL en el navegador y despierta al router
+                window.location.hash = route;
+            }
+        });
+    </script>
 
-    document.getElementById('site-footer')?.addEventListener('click', function (e) {
-      const link = e.target.closest('[data-route]');
-      if (link) {
-        e.preventDefault();
-        const route = link.dataset.route;
-        window.dispatchEvent(new CustomEvent('lumiere:navigate', { detail: { route } }));
-      }
-    });
-  </script>
+    <script type="module" src="./assets/js/app/app.js"></script>
 
 </body>
 </html>

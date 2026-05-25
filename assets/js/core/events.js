@@ -605,4 +605,4 @@ if (typeof window !== "undefined") {
 // ─── Exports ──────────────────────────────────────────────────
 
 export default bus;
-export { EventBus, EventBusContext, EVENTS };
+export { EventBus, EventBusContext, bus };

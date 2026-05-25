@@ -7,12 +7,12 @@ import store from "./store.js";
 import { bus, EVENTS } from "./events.js";
 
 const ROUTES = {
-  "/": "./js/pages/home.page.html",
-  "/catalog": "./js/pages/catalog.page.html",
-  "/product": "./js/pages/product-detail.page.html",
-  "/cart": "./js/pages/cart.page.html",
-  "/checkout": "./js/pages/checkout.page.html",
-  "/orders": "./js/pages/orders.page.html",
+  "/": "./assets/js/pages/home.page.html",
+  "/catalog": "./assets/js/pages/catalog.page.html",
+  "/product": "./assets/js/pages/product-detail.page.html",
+  "/cart": "./assets/js/pages/cart.page.html",
+  "/checkout": "./assets/js/pages/checkout.page.html",
+  "/orders": "./assets/js/pages/orders.page.html",
 };
 
 export class Router {
@@ -61,6 +61,12 @@ export class Router {
 
       // Disparar ciclo de vida de la página montada
       this._initPageLogic(routeBase, path);
+
+      // ═══ APAGAR LOADER CUANDO LA VISTA CARGA CON ÉXITO ═══
+      const loader = document.getElementById("page-loader");
+      if (loader) {
+        loader.classList.add("hidden");
+      }
     } catch (error) {
       console.error("Error en enrutamiento LUMIÈRE:", error);
       this.appContainer.innerHTML = `
@@ -68,6 +74,12 @@ export class Router {
           <h2 style="font-family:serif; font-size:1.8rem; margin-bottom:10px;">VISTA NO DISPONIBLE</h2>
           <p style="color:#666;">Asegúrate de que el archivo de la plantilla exista en la ruta correcta.</p>
         </div>`;
+
+      // ═══ APAGAR LOADER EN CASO DE ERROR PARA NO CONGELAR LA PANTALLA ═══
+      const loader = document.getElementById("page-loader");
+      if (loader) {
+        loader.classList.add("hidden");
+      }
     }
   }
 
