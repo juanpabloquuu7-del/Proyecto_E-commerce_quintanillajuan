@@ -13,8 +13,7 @@
  *   window.dispatchEvent(new CustomEvent('lumiere:loader', { detail: { visible: true } }));
  */
 
-import bus, { EVENTS } from "../core/events.js";
-
+import { bus, EVENTS } from "../core/events.js";
 // ─── Constantes ────────────────────────────────────────────────────────────────
 
 const TAG_NAME = "lumiere-loader";

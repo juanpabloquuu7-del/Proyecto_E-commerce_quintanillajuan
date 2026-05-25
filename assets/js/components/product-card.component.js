@@ -22,7 +22,7 @@
  * ─────────────────────────────────────────────────────────────
  */
 
-import bus, { EVENTS } from "../core/events.js";
+import { bus, EVENTS } from "../core/events.js";
 import store from "../core/store.js";
 
 // ─── Estilos Shadow DOM ───────────────────────────────────────
