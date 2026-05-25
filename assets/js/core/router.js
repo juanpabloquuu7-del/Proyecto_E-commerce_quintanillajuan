@@ -12,6 +12,7 @@ const ROUTES = {
   "/catalog": "./js/pages/catalog.page.html",
   "/product": "./js/pages/product-detail.page.html",
   "/checkout": "./js/pages/checkout.page.html",
+  "/cart": "./js/pages/cart.page.html", // Añadimos la ruta del carrito
 };
 
 export class Router {
@@ -69,6 +70,9 @@ export class Router {
       this._initProductDetailLogic(fullPath);
     } else if (route === "/checkout") {
       this._initCheckoutLogic();
+    } else if (route === "/cart") {
+      console.log("Carrito montado con éxito.");
+      // Aquí puedes inicializar la lógica para pintar los productos del carrito
     }
   }
 
