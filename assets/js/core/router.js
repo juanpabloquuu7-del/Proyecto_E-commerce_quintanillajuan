@@ -11,8 +11,9 @@ const ROUTES = {
   "/": "./js/pages/home.page.html",
   "/catalog": "./js/pages/catalog.page.html",
   "/product": "./js/pages/product-detail.page.html",
+  "/cart": "./js/pages/cart.page.html",
   "/checkout": "./js/pages/checkout.page.html",
-  "/cart": "./js/pages/cart.page.html", // Añadimos la ruta del carrito
+  "/orders": "./js/pages/orders.page.html", 
 };
 
 export class Router {
@@ -68,11 +69,13 @@ export class Router {
       this._initCatalogLogic();
     } else if (route === "/product") {
       this._initProductDetailLogic(fullPath);
+    } else if (route === "/cart") {
+      console.log("Bolsa de compras LUMIÈRE montada.");
     } else if (route === "/checkout") {
       this._initCheckoutLogic();
-    } else if (route === "/cart") {
-      console.log("Carrito montado con éxito.");
-      // Aquí puedes inicializar la lógica para pintar los productos del carrito
+    } else if (route === "/orders") {
+      console.log("Historial de órdenes montado con éxito.");
+      // Aquí puedes llamar a tu servicio de órdenes para pintar la tabla dinámicamente
     }
   }
 
