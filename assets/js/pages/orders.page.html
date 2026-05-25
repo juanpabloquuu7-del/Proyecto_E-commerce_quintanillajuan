@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="./js/pages/css/orders.page.css" />
+
+<article class="orders-page">
+  <header class="orders-header">
+    <h1 class="orders-title">Mis Pedidos</h1>
+    <p class="orders-subtitle">Historial y estado de tus adquisiciones exclusivas en LUMIÈRE.</p>
+  </header>
+
+  <section class="orders-content" aria-label="Listado de órdenes de compra">
+    <div id="orders-container" class="orders-list-wrapper">
+      
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th scope="col">ID Orden</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Productos</th>
+            <th scope="col">Total</th>
+            <th scope="col">Estado</th>
+          </tr>
+        </thead>
+        <tbody id="orders-tbody">
+          <tr class="orders-empty-row">
+            <td colspan="5" class="orders-empty-msg">
+              Aún no has realizado ningún pedido. ¡Explora nuestra colección!
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </section>
+</article>
