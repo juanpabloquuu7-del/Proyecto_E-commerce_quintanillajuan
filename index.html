@@ -1,256 +1,72 @@
 <!DOCTYPE html>
-<html lang="es" dir="ltr">
-
+<html lang="es">
 <head>
-  <!-- ═══════════════════════════════════════════
-       META ESSENTIALS
-  ═══════════════════════════════════════════ -->
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-  <!-- ═══════════════════════════════════════════
-       SEO PRIMARY
-  ═══════════════════════════════════════════ -->
-  <title>LUMIÈRE — Moda & Estilo Contemporáneo</title>
-  <meta name="description"
-    content="Descubre la nueva colección de moda contemporánea. Prendas de alta calidad con diseño exclusivo para mujeres y hombres que marcan tendencia." />
-  <meta name="keywords"
-    content="moda, ropa, fashion, colección, tendencias, ropa mujer, ropa hombre, tienda online" />
-  <meta name="author" content="LUMIÈRE Fashion" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://lumiere-fashion.com/" />
-
-  <!-- ═══════════════════════════════════════════
-       OPEN GRAPH (Social Sharing)
-  ═══════════════════════════════════════════ -->
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="LUMIÈRE Fashion" />
-  <meta property="og:title" content="LUMIÈRE — Moda & Estilo Contemporáneo" />
-  <meta property="og:description"
-    content="Descubre la nueva colección de moda contemporánea. Prendas de alta calidad con diseño exclusivo." />
-  <meta property="og:url" content="https://lumiere-fashion.com/" />
-  <meta property="og:image" content="https://lumiere-fashion.com/assets/images/og-cover.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:locale" content="es_CO" />
-
-  <!-- ═══════════════════════════════════════════
-       TWITTER CARD
-  ═══════════════════════════════════════════ -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@LumiereFashion" />
-  <meta name="twitter:title" content="LUMIÈRE — Moda & Estilo Contemporáneo" />
-  <meta name="twitter:description"
-    content="Descubre la nueva colección de moda contemporánea. Prendas de alta calidad con diseño exclusivo." />
-  <meta name="twitter:image" content="https://lumiere-fashion.com/assets/images/og-cover.jpg" />
-
-  <!-- ═══════════════════════════════════════════
-       PWA & MOBILE
-  ═══════════════════════════════════════════ -->
-  <meta name="theme-color" content="#1a1a2e" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="LUMIÈRE" />
-  <meta name="format-detection" content="telephone=no" />
-
-  <!-- ═══════════════════════════════════════════
-       FAVICON
-  ═══════════════════════════════════════════ -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%231a1a2e'/><text y='22' x='5' font-size='18' font-family='Georgia,serif' fill='%23c9a96e'>L</text></svg>" />
-
-  <!-- ═══════════════════════════════════════════
-       FONTS — Google Fonts
-  ═══════════════════════════════════════════ -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
-    rel="stylesheet" />
-
-  <!-- ═══════════════════════════════════════════
-       TAILWIND CSS — CDN
-  ═══════════════════════════════════════════ -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary:   { DEFAULT: '#1a1a2e', light: '#16213e', dark: '#0f0f1a' },
-            accent:    { DEFAULT: '#c9a96e', light: '#dbbf8a', dark: '#a07840' },
-            secondary: { DEFAULT: '#e8d5b7', dark: '#cdb898' },
-            cream:     { DEFAULT: '#faf8f5', dark: '#f0eeeb' },
-          },
-          fontFamily: {
-            display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-            body:    ['"DM Sans"', 'system-ui', 'sans-serif'],
-          },
-          transitionTimingFunction: {
-            'bounce-in': 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-            'spring':    'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-          },
-          animation: {
-            'fade-in':  'fadeIn 0.3s ease-out forwards',
-            'slide-up': 'slideUp 0.4s ease-out forwards',
-          },
-          keyframes: {
-            fadeIn:  { from: { opacity: '0' }, to: { opacity: '1' } },
-            slideUp: { from: { opacity: '0', transform: 'translateY(12px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
-          },
-          maxWidth: { '8xl': '1440px' },
-        },
-      },
-    };
-  </script>
-
-  <!-- ═══════════════════════════════════════════
-       CUSTOM CSS
-  ═══════════════════════════════════════════ -->
-  <link rel="stylesheet" href="assets/css/main.css" />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUMIÈRE — E-Commerce Premium</title>
+  <link rel="stylesheet" href="./assets/css/main.css" />
 </head>
+<body>
 
-<body class="bg-cream font-body text-gray-900 overflow-x-hidden">
+  <lumiere-navbar></lumiere-navbar>
 
-  <a href="#main-content" class="skip-link">
-    Saltar al contenido principal
-  </a>
+  <main id="app"></main>
 
-  <!-- PAGE LOADER -->
-  <div id="page-loader" class="page-loader" role="status" aria-label="Cargando..." aria-live="polite">
-    <div class="flex flex-col items-center gap-6">
-      <div class="flex flex-col items-center gap-1">
-        <span class="font-display text-4xl font-light tracking-widest text-primary" style="animation: fadeIn 0.6s ease-out forwards; opacity: 0;">LUMIÈRE</span>
-        <span class="text-xs tracking-widest uppercase text-accent" style="animation: fadeIn 0.6s ease-out 0.2s forwards; opacity: 0;">Fashion & Style</span>
+  <div id="cart-modal-backdrop" class="cart-modal-backdrop"></div>
+  <aside id="cart-modal" class="cart-modal" aria-hidden="true">
+    <div class="cart-modal-header">
+      <div>
+        <h2>Tu bolsa</h2>
+        <p>Vista rápida de lo que ya elegiste</p>
       </div>
-      <div class="spinner" aria-hidden="true"></div>
+      <button id="cart-close" class="btn-secondary" type="button">Cerrar</button>
     </div>
-  </div>
-
-  <div id="toast-container" class="toast-container" role="region" aria-label="Notificaciones" aria-live="polite" aria-atomic="false"></div>
-  <div id="overlay" class="overlay" role="presentation" aria-hidden="true"></div>
-
-  <!-- WEB COMPONENTS -->
-  <nav-bar role="banner"></nav-bar>
-  <cart-drawer role="complementary" aria-label="Carrito de compras"></cart-drawer>
-  <product-modal role="dialog" aria-modal="true" aria-label="Detalle del producto"></product-modal>
-
-  <!-- ═══════════════════════════════════════════
-       MAIN CONTENT (AQUÍ ES DONDE EL ROUTER INYECTA TODO LO QUE AVANZAMOS)
-  ═══════════════════════════════════════════ -->
-  <main id="main-content" role="main">
-    <div id="app" class="min-h-screen" aria-live="polite" aria-atomic="true">
-      <div id="app-placeholder" class="flex items-center justify-center min-h-screen" aria-hidden="true">
-        <div class="dot-loader">
-          <span></span><span></span><span></span>
-        </div>
+    <div id="cart-items" class="cart-modal-body"></div>
+    <div class="cart-modal-footer">
+      <div id="cart-summary" class="cart-summary"></div>
+      <div class="cart-total-row">
+        <strong>Total</strong>
+        <strong id="cart-total" class="cart-total">$0</strong>
       </div>
+      <div class="cart-total-row">
+        <span>Ahorro</span>
+        <span id="cart-savings">$0</span>
+      </div>
+      <button id="cart-checkout" class="btn-primary" type="button" style="width:100%; margin-top:0.75rem;">Ir a checkout</button>
     </div>
-  </main>
+  </aside>
 
-  <!-- FOOTER -->
-  <!-- ═══════════════════════════════════════════
-       FOOTER CORREGIDO
-  ═══════════════════════════════════════════ -->
-  <footer id="site-footer"
-          role="contentinfo"
-          class="bg-primary text-cream"
-          aria-label="Pie de página">
-
-    <div class="container mx-auto py-16 px-4">
-
-      <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-
-        <!-- Brand -->
-        <div class="flex flex-col gap-4">
-          <div>
-            <p class="font-display text-3xl font-light tracking-widest text-white">LUMIÈRE</p>
-            <p class="text-xs tracking-widest uppercase text-accent mt-1">Fashion & Style</p>
-          </div>
-          <p class="text-sm leading-relaxed text-gray-400 max-w-xs">
-            Moda contemporánea con identidad propia. Colecciones que fusionan elegancia atemporal y tendencia actual.
-          </p>
-        </div>
-
-        <!-- Links: Colecciones -->
-        <nav aria-label="Colecciones">
-          <h3 class="text-xs font-medium tracking-widest uppercase text-accent mb-5">Colecciones</h3>
-          <ul class="flex flex-col gap-3" role="list">
-            <li><a href="#" data-route="/catalog"
-                   class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">
-                Ver Catálogo Completo</a></li>
-            <li><a href="#" data-route="/catalog?category=mujer"
-                   class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">
-                Mujer</a></li>
-            <li><a href="#" data-route="/catalog?category=hombre"
-                   class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">
-                Hombre</a></li>
-          </ul>
-        </nav>
-
-        <!-- Links: Ayuda & Cuenta (Aquí corregimos los data-route limpios) -->
-        <nav aria-label="Ayuda y Cuenta">
-          <h3 class="text-xs font-medium tracking-widest uppercase text-accent mb-5">Ayuda & Cuenta</h3>
-          <ul class="flex flex-col gap-3" role="list">
-            <li><a href="#" data-route="/cart"
-                   class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">
-                Tu Bolsa de Compra</a></li>
-            <li><a href="#" data-route="/checkout"
-                   class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">
-                Finalizar Pedido</a></li>
-            <li><a href="#" data-route="/orders"
-                   class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">
-                Mis Pedidos</a></li>
-            <li><a href="#"
-                   class="text-sm text-gray-400 hover:text-white transition-colors duration-200 hover-underline">
-                Contacto</a></li>
-          </ul>
-        </nav>
-
-        <!-- Newsletter -->
-        <div>
-          <h3 class="text-xs font-medium tracking-widest uppercase text-accent mb-5">Newsletter</h3>
-          <form id="newsletter-form" class="flex flex-col gap-3" novalidate aria-label="Suscripción al newsletter">
-            <div class="form-group">
-              <label for="newsletter-email" class="sr-only">Correo electrónico</label>
-              <input type="email" id="newsletter-email" required placeholder="tu@correo.com"
-                     class="form-input bg-transparent border-gray-700 text-white placeholder-gray-600 focus:border-accent text-sm"
-                     style="border-color: rgba(255,255,255,0.15); color: #faf8f5;" />
-            </div>
-            <button type="submit" class="btn btn-accent btn-sm w-full">Suscribirme</button>
-          </form>
-          <p id="newsletter-msg" class="mt-3 text-xs" aria-live="polite"></p>
-        </div>
-
+  <footer class="site-footer">
+    <div class="footer-shell">
+      <div class="footer-brand-block">
+        <p class="footer-brand">LUMIÈRE</p>
+        <p class="footer-tagline">Estilo editorial para quienes buscan un look impecable, moderno y comercial.</p>
+        <p class="footer-copy">Alta Costura Urbana &copy; 2026</p>
       </div>
 
-      <!-- Bottom bar -->
-      <div class="divider mt-12 mb-8" style="background-color: rgba(255,255,255,0.08);"></div>
-      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p class="text-xs text-gray-600">
-          &copy; <span id="footer-year"></span> LUMIÈRE Fashion. Todos los derechos reservados.
-        </p>
+      <div class="footer-links-block">
+        <h2>Explora</h2>
+        <a href="#/catalog" data-route="/catalog">Catálogo</a>
+        <a href="#/catalog?sort=newest" data-route="/catalog?sort=newest">Novedades</a>
+        <a href="#/catalog?onSale=true" data-route="/catalog?onSale=true">Ofertas</a>
       </div>
 
+      <div class="footer-links-block">
+        <h2>Atención al cliente</h2>
+        <a href="#/orders" data-route="/orders">Mis pedidos</a>
+        <a href="#/checkout" data-route="/checkout">Checkout</a>
+        <a href="#/">Soporte</a>
+      </div>
+
+      <div class="footer-links-block">
+        <h2>Confianza</h2>
+        <span>Envíos rápidos</span>
+        <span>Pago seguro</span>
+        <span>Devoluciones simples</span>
+      </div>
     </div>
   </footer>
 
-<script>
-        document.getElementById('site-footer')?.addEventListener('click', function (e) {
-            const link = e.target.closest('[data-route]');
-            if (link) {
-                e.preventDefault();
-                const route = link.dataset.route;
-                
-                // Cambia la URL en el navegador y despierta al router
-                window.location.hash = route;
-            }
-        });
-    </script>
-
-    <script type="module" src="./assets/js/app/app.js"></script>
-
+  <script type="module" src="./assets/js/app/app.js"></script>
 </body>
 </html>

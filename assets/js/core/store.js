@@ -10,6 +10,7 @@ const DEFAULT_STATE = {
   filters: { category: "all", search: "", sort: "relevance", onSale: false },
   wishlist: { items: [] },
   orders: [],
+  products: { items: [], loaded: false, updatedAt: null },
 };
 
 class Store {

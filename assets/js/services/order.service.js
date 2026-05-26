@@ -5,6 +5,7 @@
  */
 
 import store from "../core/store.js";
+import ProductService from "./product.service.js";
 
 export class OrderService {
   /**
@@ -60,6 +61,17 @@ export class OrderService {
       status: "Procesado con Éxito",
       createdAt: new Date().toISOString(),
     };
+
+    // Descontamos stock de manera preventiva para que el inventario refleje el pedido.
+    for (const item of orderData.items) {
+      const result = ProductService.decrementStock(item.productId, item.quantity);
+      if (!result.success) {
+        return {
+          success: false,
+          errors: result.errors || ["No se pudo actualizar el inventario del pedido."],
+        };
+      }
+    }
 
     // Recuperamos las órdenes previas, inyectamos la nueva al inicio y actualizamos el Store
     const currentOrders = store.getState("orders") || [];

@@ -1,0 +1,65 @@
+<section class="admin-page">
+  <div class="admin-page-header">
+    <div>
+      <p class="hero-tag">Curaduría editorial</p>
+      <h1>Gestión de categorías</h1>
+      <p class="admin-lead">
+        Crea, edita y elimina las familias de productos que alimentan el catálogo y los filtros del cliente.
+      </p>
+    </div>
+    <div class="admin-actions">
+      <button type="button" class="btn-secondary" data-route="/admin/dashboard">Volver al dashboard</button>
+    </div>
+  </div>
+
+  <div class="admin-grid-two">
+    <form id="category-form" class="admin-card admin-form-card">
+      <div class="card-title-row">
+        <div>
+          <p class="hero-tag">Formulario</p>
+          <h2>Crear o editar categoría</h2>
+        </div>
+      </div>
+
+      <input type="hidden" id="category-id" />
+
+      <label class="field-row">
+        <span>Nombre de categoría</span>
+        <input id="category-name" type="text" placeholder="Ej: Colección Denim" required />
+      </label>
+
+      <label class="field-row">
+        <span>Descripción</span>
+        <textarea id="category-description" rows="4" placeholder="Explica la propuesta de esta categoría para el cliente."></textarea>
+      </label>
+
+      <div class="form-actions-row">
+        <button type="submit" class="btn-primary">Guardar categoría</button>
+        <button type="button" id="category-reset-btn" class="btn-secondary">Limpiar</button>
+      </div>
+    </form>
+
+    <div class="admin-card">
+      <div class="card-title-row">
+        <div>
+          <p class="hero-tag">Catálogo</p>
+          <h2>Categorías activas</h2>
+        </div>
+      </div>
+      <div id="category-message" class="admin-message"></div>
+      <div class="table-shell">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Identificador</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="categories-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,14 +1,16 @@
-<link rel="stylesheet" href="./js/pages/css/orders.page.css" />
+<link rel="stylesheet" href="./assets/css/main.css" />
 
 <article class="orders-page">
   <header class="orders-header">
-    <h1 class="orders-title">Mis Pedidos</h1>
-    <p class="orders-subtitle">Historial y estado de tus adquisiciones exclusivas en LUMIÈRE.</p>
+    <div>
+      <p class="hero-tag">Historial comercial</p>
+      <h1 class="orders-title">Mis Pedidos</h1>
+    </div>
+    <p class="orders-subtitle">Revisa el estado de tus compras y el detalle de cada entrega.</p>
   </header>
 
   <section class="orders-content" aria-label="Listado de órdenes de compra">
     <div id="orders-container" class="orders-list-wrapper">
-      
       <table class="orders-table">
         <thead>
           <tr>
@@ -19,15 +21,20 @@
             <th scope="col">Estado</th>
           </tr>
         </thead>
-        <tbody id="orders-tbody">
-          <tr class="orders-empty-row">
-            <td colspan="5" class="orders-empty-msg">
-              Aún no has realizado ningún pedido. ¡Explora nuestra colección!
-            </td>
-          </tr>
-        </tbody>
+        <tbody id="orders-tbody"></tbody>
       </table>
-
     </div>
+
+    <section class="orders-detail-card">
+      <div class="card-title-row">
+        <div>
+          <p class="hero-tag">Detalle</p>
+          <h2>Resumen de tu pedido</h2>
+        </div>
+      </div>
+      <div id="orders-detail-panel" class="orders-detail-panel">
+        <p>Selecciona una orden para ver su resumen, dirección y método de pago.</p>
+      </div>
+    </section>
   </section>
 </article>

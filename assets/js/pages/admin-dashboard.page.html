@@ -1,0 +1,41 @@
+<section class="admin-page">
+  <div class="admin-page-header">
+    <div>
+      <p class="hero-tag">Operación diaria</p>
+      <h1>Dashboard LUMIÈRE</h1>
+      <p class="admin-lead">
+        Monitorea inventario, conversiones y el estado de tus pedidos desde un solo panel.
+      </p>
+    </div>
+
+    <div class="admin-actions">
+      <button type="button" class="btn-secondary" data-route="/admin/products">Gestionar productos</button>
+      <button type="button" class="btn-secondary" data-route="/admin/categories">Gestionar categorías</button>
+      <button type="button" class="btn-primary" id="admin-logout-btn">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <div id="dashboard-summary" class="metrics-grid"></div>
+
+  <div class="admin-grid-two">
+    <section class="admin-card">
+      <div class="card-title-row">
+        <div>
+          <p class="hero-tag">Pedidos recientes</p>
+          <h2>Últimas órdenes</h2>
+        </div>
+      </div>
+      <div id="dashboard-orders" class="detail-list"></div>
+    </section>
+
+    <section class="admin-card">
+      <div class="card-title-row">
+        <div>
+          <p class="hero-tag">Inventario</p>
+          <h2>Reabastecer pronto</h2>
+        </div>
+      </div>
+      <div id="dashboard-low-stock" class="detail-list"></div>
+    </section>
+  </div>
+</section>

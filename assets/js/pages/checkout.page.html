@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="./js/pages/css/checkout.page.css" />
+<link rel="stylesheet" href="./assets/css/main.css" />
 
 <main class="checkout-page">
   <header class="checkout-header">
@@ -7,15 +7,13 @@
   </header>
 
   <div class="checkout-container">
-    
     <section class="checkout-form-wrapper" aria-labelledby="form-title">
       <h2 id="form-title" class="sr-only">Detalles de Facturación y Pago</h2>
-      
+
       <form id="checkout-form" class="checkout-form">
-        
         <fieldset class="form-section">
           <legend class="section-legend">1. Detalles de Envío</legend>
-          
+
           <div class="form-group-inline">
             <div class="form-group">
               <label for="bill-firstname">Nombre</label>
@@ -26,21 +24,32 @@
               <input type="text" id="bill-lastname" required placeholder="Pablo" />
             </div>
           </div>
-          
+
           <div class="form-group">
             <label for="bill-address">Dirección de residencia</label>
             <input type="text" id="bill-address" required placeholder="Calle, Avenida, Conjunto, Bloque o Edificio..." />
           </div>
-          
+
+          <div class="form-group-inline">
+            <div class="form-group">
+              <label for="bill-city">Ciudad / Municipio</label>
+              <input type="text" id="bill-city" required placeholder="Bucaramanga" />
+            </div>
+            <div class="form-group">
+              <label for="bill-phone">Teléfono</label>
+              <input type="tel" id="bill-phone" required placeholder="3001234567" />
+            </div>
+          </div>
+
           <div class="form-group">
-            <label for="bill-city">Ciudad / Municipio</label>
-            <input type="text" id="bill-city" required placeholder="Bucaramanga" />
+            <label for="bill-email">Correo electrónico</label>
+            <input type="email" id="bill-email" required placeholder="cliente@correo.com" />
           </div>
         </fieldset>
 
         <fieldset class="form-section">
           <legend class="section-legend">2. Método de Pago</legend>
-          
+
           <div class="payment-methods" role="radiogroup" aria-label="Opciones de pago disponibles">
             <label class="method-option">
               <input type="radio" name="payment-type" value="card" checked />
@@ -48,7 +57,7 @@
                 <span class="method-title">Tarjeta de Crédito</span>
               </div>
             </label>
-            
+
             <label class="method-option">
               <input type="radio" name="payment-type" value="delivery" />
               <div class="method-box">
@@ -59,18 +68,15 @@
         </fieldset>
 
         <div class="form-actions">
-          <button type="submit" class="btn-submit-order">
-            Procesar Orden Completa
-          </button>
+          <button type="submit" class="btn-primary">Procesar Orden Completa</button>
         </div>
       </form>
     </section>
 
     <aside class="checkout-summary" aria-label="Resumen de su bolsa de compras">
       <h3 class="summary-title">Tu Carrito</h3>
-      
-      <div id="checkout-items-list" class="summary-items-list">
-        </div>
+
+      <div id="checkout-items-list" class="summary-items-list"></div>
 
       <div class="summary-divider" role="presentation"></div>
 
@@ -89,6 +95,5 @@
         </div>
       </footer>
     </aside>
-
   </div>
 </main>
