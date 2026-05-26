@@ -81,8 +81,8 @@ function ensureCategorySeed() {
 const AdminService = {
   getDefaultCredentials() {
     return {
-      email: "admin@lumiere.com",
-      password: "lumiere2026",
+      email: "admin@mail.com",
+      password: "123456",
     };
   },
 
