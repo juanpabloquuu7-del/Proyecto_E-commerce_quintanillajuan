@@ -36,6 +36,11 @@ function toCopValue(value) {
   return Math.round(value);
 }
 
+function normalizeId(id) {
+  if (id === undefined || id === null) return "";
+  return String(id);
+}
+
 function normalizeProducts(products) {
   if (!Array.isArray(products)) return [];
 
@@ -214,7 +219,7 @@ const ProductService = {
         category: "dresses",
         images: ["./assets/js/pages/imgs/outfit_2_ombre_lumiere.png"],
         sizes: ["S", "M", "L"],
-        stock: 12,
+        stock: 0,
         sku: "LM-DR-EB01",
         isNew: true,
         onSale: true,
@@ -311,10 +316,10 @@ const ProductService = {
    * @returns {Object|null} El producto encontrado o null.
    */
   getById(id) {
-    if (!id) return null;
+    if (!id && id !== 0) return null;
     const items = readAll();
-    const normalizedId = String(id);
-    return items.find((p) => String(p.id) === normalizedId) ?? null;
+    const normalizedId = normalizeId(id);
+    return items.find((p) => normalizeId(p.id) === normalizedId) ?? null;
   },
 
   /**
@@ -480,7 +485,8 @@ const ProductService = {
     }
 
     const products = readAll();
-    const idx = products.findIndex((p) => p.id === id);
+    const normalizedId = normalizeId(id);
+    const idx = products.findIndex((p) => normalizeId(p.id) === normalizedId);
     if (idx === -1)
       return {
         success: false,
@@ -492,7 +498,7 @@ const ProductService = {
       if (
         products.some(
           (p) =>
-            p.sku?.toLowerCase() === patchData.sku.toLowerCase() && p.id !== id,
+            p.sku?.toLowerCase() === patchData.sku.toLowerCase() && normalizeId(p.id) !== normalizedId,
         )
       ) {
         return {
@@ -542,7 +548,8 @@ const ProductService = {
     const products = readAll();
     const initialLength = products.length;
 
-    const filtered = products.filter((p) => p.id !== id);
+    const normalizedId = normalizeId(id);
+    const filtered = products.filter((p) => normalizeId(p.id) !== normalizedId);
     if (filtered.length === initialLength) return false;
 
     writeAll(filtered);
