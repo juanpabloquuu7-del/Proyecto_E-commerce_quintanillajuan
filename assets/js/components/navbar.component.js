@@ -9,7 +9,7 @@
 
 import store from "../core/store.js";
 import bus, { EVENTS } from "../core/events.js";
-import router from "../core/router.js";
+import Router from "../core/router.js";
 
 // ─── Constantes ────────────────────────────────────────────────────────────────
 
@@ -20,6 +20,7 @@ const NAV_LINKS = [
   { label: "Catálogo", path: "/catalog" },
   { label: "Novedades", path: "/catalog?sort=newest" },
   { label: "Ofertas", path: "/catalog?onSale=true" },
+  { label: "Panel Admin", path: "/admin/login" },
 ];
 
 // ─── Estilos Shadow DOM ────────────────────────────────────────────────────────
@@ -200,7 +201,7 @@ export class LumiereNavbar extends HTMLElement {
 
     // Control del botón de la bolsa/carrito lateral
     this._shadow.getElementById("cart-btn")?.addEventListener("click", () => {
-      bus.emit(EVENTS.CART_OPEN);
+      window.dispatchEvent(new CustomEvent("lumiere:open-cart"));
     });
 
     // Mostrar y ocultar barra de búsqueda interna

@@ -11,8 +11,9 @@ import storage from "./storage.service.js";
 // ─── Constantes ────────────────────────────────────────────────────────────────
 
 const STORAGE_KEY = "ecommerce_products";
-const SEED_URL = "/data/products.json";
+const SEED_URL = "/assets/js/data/products.json";
 const SEED_FLAG = "ecommerce_products_seeded";
+const CATEGORY_STORAGE_KEY = "admin_categories";
 
 // ─── Esquema de validación ──────────────────────────────────────────────────────
 
@@ -29,14 +30,65 @@ const VALID_CATEGORIES = [
   "jewelry",
 ];
 
+function toCopValue(value) {
+  if (typeof value !== "number" || Number.isNaN(value)) return value;
+  if (value < 1000) return Math.round(value * 1000);
+  return Math.round(value);
+}
+
+function normalizeProducts(products) {
+  if (!Array.isArray(products)) return [];
+
+  return products
+    .filter(Boolean)
+    .map((product) => {
+      const images = Array.isArray(product.images)
+        ? product.images
+        : product.image
+          ? [product.image]
+          : [];
+
+      return {
+        ...product,
+        image: product.image || images[0] || null,
+        images,
+        price: toCopValue(product.price),
+        compareAtPrice:
+          product.compareAtPrice === null || product.compareAtPrice === undefined
+            ? null
+            : toCopValue(product.compareAtPrice),
+        sizes: Array.isArray(product.sizes) && product.sizes.length > 0
+          ? product.sizes
+          : ["Única"],
+        stock: Number.isFinite(product.stock) ? product.stock : 0,
+      };
+    })
+    .filter((product) => product.name && product.price !== undefined);
+}
+
 /**
  * Valida un objeto producto.
  * @param {Object} data  - Datos a validar.
  * @param {boolean} partial - Si true, omite validación de campos requeridos (para update).
  * @returns {{ valid: boolean, errors: string[] }}
  */
+function getConfiguredCategories() {
+  const customCategories = storage.get(CATEGORY_STORAGE_KEY) ?? [];
+
+  if (!Array.isArray(customCategories) || customCategories.length === 0) {
+    return [...VALID_CATEGORIES];
+  }
+
+  const ids = customCategories
+    .map((category) => String(category?.id || "").trim())
+    .filter(Boolean);
+
+  return ids.length > 0 ? ids : [...VALID_CATEGORIES];
+}
+
 function validate(data, partial = false) {
   const errors = [];
+  const allowedCategories = getConfiguredCategories();
 
   if (!partial) {
     for (const field of REQUIRED_FIELDS) {
@@ -68,12 +120,9 @@ function validate(data, partial = false) {
     }
   }
 
-  if (
-    data.category !== undefined &&
-    !VALID_CATEGORIES.includes(data.category)
-  ) {
+  if (data.category !== undefined && !allowedCategories.includes(data.category)) {
     errors.push(
-      `Categoría inválida. Valores permitidos: ${VALID_CATEGORIES.join(", ")}`,
+      `Categoría inválida. Valores permitidos: ${allowedCategories.join(", ")}`,
     );
   }
 
@@ -99,14 +148,15 @@ function validate(data, partial = false) {
 
 /** Lee de localStorage de forma segura garantizando un array. */
 function readAll() {
-  return storage.get(STORAGE_KEY) ?? [];
+  return normalizeProducts(storage.get(STORAGE_KEY) ?? []);
 }
 
 /** Escribe en localStorage y sincroniza el store central de manera reactiva. */
 function writeAll(products) {
-  storage.set(STORAGE_KEY, products);
+  const normalized = normalizeProducts(products);
+  storage.set(STORAGE_KEY, normalized);
   store.setState("products", {
-    items: products,
+    items: normalized,
     loaded: true,
     updatedAt: new Date().toISOString(),
   });
@@ -125,32 +175,31 @@ const ProductService = {
   async init() {
     const localData = readAll();
 
-    // 1. Si ya hay datos en LocalStorage, los cargamos directamente al store
-    if (localData.length > 0 && storage.get(SEED_FLAG)) {
-      writeAll(localData);
-      return { origin: "storage", count: localData.length };
-    }
-
-    // 2. Si está vacío, intentamos descargar el JSON de productos (Seed oficial)
     try {
       const response = await fetch(SEED_URL);
       if (!response.ok) throw new Error(`HTTP status ${response.status}`);
 
       const remoteProducts = await response.json();
-      if (Array.isArray(remoteProducts) && remoteProducts.length > 0) {
-        writeAll(remoteProducts);
+      const normalizedRemoteProducts = normalizeProducts(remoteProducts);
+      if (Array.isArray(normalizedRemoteProducts) && normalizedRemoteProducts.length > 0) {
+        writeAll(normalizedRemoteProducts);
         storage.set(SEED_FLAG, true);
         bus.emit(EVENTS.PRODUCTS_LOADED, {
           origin: "network",
-          count: remoteProducts.length,
+          count: normalizedRemoteProducts.length,
         });
-        return { origin: "network", count: remoteProducts.length };
+        return { origin: "network", count: normalizedRemoteProducts.length };
       }
     } catch (err) {
       console.warn(
-        "⚠️ No se pudo descargar seed/products.json, usando fallback estático:",
+        "⚠️ No se pudo descargar seed/products.json, usando respaldo local o fallback:",
         err.message,
       );
+    }
+
+    if (Array.isArray(localData) && localData.length > 0 && storage.get(SEED_FLAG)) {
+      writeAll(localData);
+      return { origin: "storage", count: localData.length };
     }
 
     // 3. Fallback estático de emergencia por si el servidor local no responde la ruta data/
@@ -163,7 +212,7 @@ const ProductService = {
         price: 345000,
         compareAtPrice: 420000,
         category: "dresses",
-        images: ["./assets/images/outfit_2_ombre_lumiere.jpg"],
+        images: ["./assets/js/pages/imgs/outfit_2_ombre_lumiere.png"],
         sizes: ["S", "M", "L"],
         stock: 12,
         sku: "LM-DR-EB01",
@@ -179,7 +228,7 @@ const ProductService = {
         price: 520000,
         compareAtPrice: null,
         category: "outerwear",
-        images: ["./assets/images/outfit_4_aurora_nocturne.jpg"],
+        images: ["./assets/js/pages/imgs/outfit_4_aurora_nocturne.png"],
         sizes: ["M", "L", "XL"],
         stock: 5,
         sku: "LM-OU-AN02",
@@ -195,7 +244,7 @@ const ProductService = {
         price: 185000,
         compareAtPrice: null,
         category: "tops",
-        images: ["./assets/images/outfit_5_lumiere_blanche.jpg"],
+        images: ["./assets/js/pages/imgs/outfit_5_lumiere_blanche.png"],
         sizes: ["S", "M", "L"],
         stock: 25,
         sku: "LM-TP-LB03",
@@ -211,7 +260,7 @@ const ProductService = {
         price: 290000,
         compareAtPrice: 340000,
         category: "bags",
-        images: ["./assets/images/outfit_3_clarte_doree.jpg"],
+        images: ["./assets/js/pages/imgs/outfit_3_clarte_doree.png"],
         sizes: ["Única"],
         stock: 7,
         sku: "LM-BG-CD04",
@@ -227,7 +276,7 @@ const ProductService = {
         price: 410000,
         compareAtPrice: null,
         category: "shoes",
-        images: ["./assets/images/outfit_6_rayonnee.jpg"],
+        images: ["./assets/js/pages/imgs/outfit_6_rayonnee.png"],
         sizes: ["36", "37", "38", "39"],
         stock: 9,
         sku: "LM-SH-RN05",
@@ -264,7 +313,8 @@ const ProductService = {
   getById(id) {
     if (!id) return null;
     const items = readAll();
-    return items.find((p) => p.id === id) ?? null;
+    const normalizedId = String(id);
+    return items.find((p) => String(p.id) === normalizedId) ?? null;
   },
 
   /**
@@ -539,7 +589,7 @@ const ProductService = {
    * @returns {string[]}
    */
   getCategories() {
-    return [...VALID_CATEGORIES];
+    return [...getConfiguredCategories()];
   },
 
   /**
@@ -548,7 +598,7 @@ const ProductService = {
    */
   getActiveCategories() {
     const used = new Set(readAll().map((p) => p.category));
-    return VALID_CATEGORIES.filter((c) => used.has(c));
+    return getConfiguredCategories().filter((c) => used.has(c));
   },
 
   // ── RESET (dev/test environment) ───────────────────────────────────────────

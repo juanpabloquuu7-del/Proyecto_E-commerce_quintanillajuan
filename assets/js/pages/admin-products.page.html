@@ -1,0 +1,111 @@
+<section class="admin-page">
+  <div class="admin-page-header">
+    <div>
+      <p class="hero-tag">Inventario premium</p>
+      <h1>Gestión de productos</h1>
+      <p class="admin-lead">
+        Añade nuevos ítems, ajusta stock/precios y controla la visibilidad de la colección.
+      </p>
+    </div>
+    <div class="admin-actions">
+      <button type="button" class="btn-secondary" data-route="/admin/dashboard">Volver al dashboard</button>
+    </div>
+  </div>
+
+  <div class="admin-grid-two">
+    <form id="product-form" class="admin-card admin-form-card">
+      <div class="card-title-row">
+        <div>
+          <p class="hero-tag">Formulario</p>
+          <h2>Crear o editar producto</h2>
+        </div>
+      </div>
+
+      <input type="hidden" id="product-id" />
+
+      <label class="field-row">
+        <span>Nombre</span>
+        <input id="product-name" type="text" required placeholder="Ej: Saco estructurado negro" />
+      </label>
+
+      <label class="field-row">
+        <span>Descripción</span>
+        <textarea id="product-description" rows="4" placeholder="Coméntale al cliente el valor editorial y la textura del artículo."></textarea>
+      </label>
+
+      <div class="field-grid">
+        <label class="field-row">
+          <span>Precio</span>
+          <input id="product-price" type="number" min="0" step="1" required placeholder="0" />
+        </label>
+
+        <label class="field-row">
+          <span>Precio anterior</span>
+          <input id="product-compare" type="number" min="0" step="1" placeholder="Opcional" />
+        </label>
+
+        <label class="field-row">
+          <span>Stock</span>
+          <input id="product-stock" type="number" min="0" step="1" required placeholder="0" />
+        </label>
+
+        <label class="field-row">
+          <span>SKU</span>
+          <input id="product-sku" type="text" placeholder="LM-XX-0001" />
+        </label>
+      </div>
+
+      <div class="field-grid">
+        <label class="field-row">
+          <span>Categoría</span>
+          <select id="product-category"></select>
+        </label>
+
+        <label class="field-row">
+          <span>Imagen principal</span>
+          <input id="product-image" type="url" placeholder="https://..." required />
+        </label>
+      </div>
+
+      <label class="field-row">
+        <span>Tallas (separadas por coma)</span>
+        <input id="product-sizes" type="text" placeholder="S, M, L" />
+      </label>
+
+      <div class="checkbox-row">
+        <label>
+          <input id="product-is-new" type="checkbox" checked />
+          <span>Marcar como novedad</span>
+        </label>
+      </div>
+
+      <div class="form-actions-row">
+        <button type="submit" class="btn-primary">Guardar producto</button>
+        <button type="button" id="product-reset-btn" class="btn-secondary">Limpiar</button>
+      </div>
+    </form>
+
+    <div class="admin-card">
+      <div class="card-title-row">
+        <div>
+          <p class="hero-tag">Inventario</p>
+          <h2>Productos actuales</h2>
+        </div>
+      </div>
+      <div class="table-shell">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Categoría</th>
+              <th>Stock</th>
+              <th>Precio</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="products-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
