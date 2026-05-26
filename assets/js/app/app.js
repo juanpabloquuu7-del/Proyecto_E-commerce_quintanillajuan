@@ -2,12 +2,23 @@
  * app.js
  * Punto de entrada principal de la aplicación LUMIÈRE.
  */
-import { Router } from "../core/router.js";
+import { Router } from "./core/router.js"; // 👈 Corregido si app.js y core/ están al mismo nivel
+import ProductService from "./services/product.service.js";
 
-// Esperamos a que todo el HTML esté cargado en el navegador
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("🚀 LUMIÈRE App inicializada con éxito.");
+// Esperamos a que todo el HTML y el DOM estén completamente listos
+document.addEventListener("DOMContentLoaded", async () => {
+  console.log("🚀 Iniciando entorno de LUMIÈRE...");
 
-  // Encendemos el enrutador para que tome el control del contenedor #app
+  try {
+    // 1. Inicializamos el seeder de productos en localStorage (Base de datos simulada)
+    const seedResult = await ProductService.init();
+    console.log(
+      `📦 Catálogo listo (${seedResult.origin}): ${seedResult.count} productos.`,
+    );
+  } catch (error) {
+    console.error("❌ Error al inicializar el catálogo de productos:", error);
+  }
+
+  // 2. Encendemos el enrutador una vez los datos base estén listos en el sistema
   window.appRouter = new Router();
 });

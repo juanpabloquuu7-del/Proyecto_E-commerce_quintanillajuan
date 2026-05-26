@@ -45,447 +45,467 @@ function validate(data, partial = false) {
         data[field] === null ||
         data[field] === ""
       ) {
-        errors.push(`El campo "${field}" es obligatorio.`);
+        errors.push(`El campo '${field}' es requerido.`);
       }
     }
   }
 
-  if (data.name !== undefined) {
-    if (typeof data.name !== "string" || data.name.trim().length < 2) {
-      errors.push("El nombre debe tener al menos 2 caracteres.");
-    }
-    if (data.name.length > 120) {
-      errors.push("El nombre no puede superar 120 caracteres.");
-    }
-  }
-
-  if (data.price !== undefined) {
-    const price = Number(data.price);
-    if (isNaN(price) || price < 0) {
-      errors.push("El precio debe ser un número positivo.");
-    }
+  if (
+    data.price !== undefined &&
+    (typeof data.price !== "number" || data.price < 0)
+  ) {
+    errors.push("El precio debe ser un número positivo.");
   }
 
   if (data.compareAtPrice !== undefined && data.compareAtPrice !== null) {
-    const cap = Number(data.compareAtPrice);
-    if (isNaN(cap) || cap < 0) {
-      errors.push("El precio comparativo debe ser un número positivo.");
+    if (typeof data.compareAtPrice !== "number" || data.compareAtPrice < 0) {
+      errors.push("El precio de comparación debe ser un número positivo.");
     }
-    if (
-      !isNaN(cap) &&
-      !isNaN(Number(data.price)) &&
-      cap <= Number(data.price)
-    ) {
+    if (data.price !== undefined && data.compareAtPrice <= data.price) {
       errors.push(
-        "El precio comparativo debe ser mayor que el precio de venta.",
+        "El precio de comparación (antes) debe ser mayor al precio actual.",
       );
     }
   }
 
-  if (data.category !== undefined) {
-    if (!VALID_CATEGORIES.includes(data.category)) {
-      errors.push(
-        `Categoría inválida. Opciones: ${VALID_CATEGORIES.join(", ")}.`,
-      );
-    }
+  if (
+    data.category !== undefined &&
+    !VALID_CATEGORIES.includes(data.category)
+  ) {
+    errors.push(
+      `Categoría inválida. Valores permitidos: ${VALID_CATEGORIES.join(", ")}`,
+    );
   }
 
-  if (data.stock !== undefined) {
-    const stock = Number(data.stock);
-    if (!Number.isInteger(stock) || stock < 0) {
-      errors.push("El stock debe ser un entero no negativo.");
-    }
+  if (
+    data.images !== undefined &&
+    (!Array.isArray(data.images) || data.images.length === 0)
+  ) {
+    errors.push("El campo 'images' debe ser un array no vacío de URLs.");
   }
 
-  if (data.images !== undefined) {
-    if (!Array.isArray(data.images) || data.images.length === 0) {
-      errors.push("Se requiere al menos una imagen.");
-    }
+  if (
+    data.stock !== undefined &&
+    (!Number.isInteger(data.stock) || data.stock < 0)
+  ) {
+    errors.push("El stock debe ser un número entero no negativo.");
   }
 
-  if (data.sizes !== undefined && !Array.isArray(data.sizes)) {
-    errors.push("Los talles deben ser un array.");
-  }
-
-  if (data.colors !== undefined && !Array.isArray(data.colors)) {
-    errors.push("Los colores deben ser un array.");
-  }
-
-  return { valid: errors.length === 0, errors };
+  return {
+    valid: errors.length === 0,
+    errors,
+  };
 }
 
-// ─── Helpers internos ──────────────────────────────────────────────────────────
-
-/** Genera un ID único tipo ULID-lite. */
-function generateId() {
-  return `prod_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
-}
-
-/** Lee la colección completa desde localStorage. */
+/** Lee de localStorage de forma segura garantizando un array. */
 function readAll() {
   return storage.get(STORAGE_KEY) ?? [];
 }
 
-/** Persiste la colección completa en localStorage. */
+/** Escribe en localStorage y sincroniza el store central de manera reactiva. */
 function writeAll(products) {
   storage.set(STORAGE_KEY, products);
-  // Sincroniza el slice del store global
-  store.setState("products", { items: products, loading: false, error: null });
+  store.setState("products", {
+    items: products,
+    loaded: true,
+    updatedAt: new Date().toISOString(),
+  });
 }
 
-// ─── Seed inicial ───────────────────────────────────────────────────────────────
-
-/**
- * Carga products.json una sola vez y lo persiste en localStorage.
- * Respeta el flag de seeding para no sobrescribir datos existentes.
- */
-async function seedIfNeeded() {
-  const alreadySeeded = storage.get(SEED_FLAG);
-  if (alreadySeeded) return;
-
-  try {
-    const res = await fetch(SEED_URL);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-    const json = await res.json();
-    const products = Array.isArray(json) ? json : (json.products ?? []);
-
-    // Normaliza cada producto del seed
-    const normalized = products.map((p) => ({
-      id: p.id ?? generateId(),
-      name: p.name,
-      description: p.description ?? "",
-      price: Number(p.price),
-      compareAtPrice: p.compareAtPrice ? Number(p.compareAtPrice) : null,
-      category: p.category,
-      subcategory: p.subcategory ?? null,
-      images: Array.isArray(p.images) ? p.images : [p.image].filter(Boolean),
-      sizes: p.sizes ?? [],
-      colors: p.colors ?? [],
-      stock: p.stock ?? 0,
-      featured: p.featured ?? false,
-      tags: p.tags ?? [],
-      rating: p.rating ?? null,
-      reviewCount: p.reviewCount ?? 0,
-      sku: p.sku ?? null,
-      createdAt: p.createdAt ?? new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    }));
-
-    writeAll(normalized);
-    storage.set(SEED_FLAG, true);
-    bus.emit(EVENTS.PRODUCTS_LOADED, {
-      count: normalized.length,
-      source: "seed",
-    });
-  } catch (err) {
-    console.error("[ProductService] Seed fallido:", err);
-    bus.emit(EVENTS.PRODUCTS_ERROR, { error: err.message, phase: "seed" });
-    // Inicializa vacío para no bloquear la app
-    if (!storage.get(STORAGE_KEY)) writeAll([]);
-  }
-}
-
-// ─── Servicio ───────────────────────────────────────────────────────────────────
+// ─── API del Servicio ───────────────────────────────────────────────────────────
 
 const ProductService = {
-  // ── Init ────────────────────────────────────────────────────────────────────
+  // ── INICIALIZACIÓN (SEEDER) ─────────────────────────────────────────────────
 
   /**
-   * Inicializa el servicio: seed + carga en store.
-   * Debe llamarse una vez desde app.js durante el bootstrap.
+   * Inicializa el catálogo de productos si no existen datos en el sistema.
+   * Descarga el seed inicial vía fetch; si falla, usa un fallback integrado.
+   * @returns {Promise<{ origin: 'storage'|'network'|'fallback', count: number }>}
    */
   async init() {
-    store.setState("products", { items: [], loading: true, error: null });
-    await seedIfNeeded();
-    const items = readAll();
-    store.setState("products", { items, loading: false, error: null });
-    return items;
+    const localData = readAll();
+
+    // 1. Si ya hay datos en LocalStorage, los cargamos directamente al store
+    if (localData.length > 0 && storage.get(SEED_FLAG)) {
+      writeAll(localData);
+      return { origin: "storage", count: localData.length };
+    }
+
+    // 2. Si está vacío, intentamos descargar el JSON de productos (Seed oficial)
+    try {
+      const response = await fetch(SEED_URL);
+      if (!response.ok) throw new Error(`HTTP status ${response.status}`);
+
+      const remoteProducts = await response.json();
+      if (Array.isArray(remoteProducts) && remoteProducts.length > 0) {
+        writeAll(remoteProducts);
+        storage.set(SEED_FLAG, true);
+        bus.emit(EVENTS.PRODUCTS_LOADED, {
+          origin: "network",
+          count: remoteProducts.length,
+        });
+        return { origin: "network", count: remoteProducts.length };
+      }
+    } catch (err) {
+      console.warn(
+        "⚠️ No se pudo descargar seed/products.json, usando fallback estático:",
+        err.message,
+      );
+    }
+
+    // 3. Fallback estático de emergencia por si el servidor local no responde la ruta data/
+    const fallbackProducts = [
+      {
+        id: "prod_dress_001",
+        name: "Vestido de Gala Silueta Ébano",
+        description:
+          "Un diseño icónico de alta costura confeccionado en satén italiano premium. Corte minimalista de caída fluida, escote asimétrico y acabados invisibles hechos a mano. Una pieza atemporal que abraza la silueta contemporánea con sofisticación suprema.",
+        price: 345000,
+        compareAtPrice: 420000,
+        category: "dresses",
+        images: ["./assets/images/outfit_2_ombre_lumiere.jpg"],
+        sizes: ["S", "M", "L"],
+        stock: 12,
+        sku: "LM-DR-EB01",
+        isNew: true,
+        onSale: true,
+        createdAt: "2024-02-15T18:30:00.000Z",
+      },
+      {
+        id: "prod_outer_002",
+        name: "Abrigo Gabardina Aurora Nocturne",
+        description:
+          "Estructura arquitectónica de doble botonadura en mezcla de lana reciclada y cachemira. Forro interior de seda jacquard satinada. Solapas sobredimensionadas y cinturón ajustable que redefine el urban chic bajo los climas de transición.",
+        price: 520000,
+        compareAtPrice: null,
+        category: "outerwear",
+        images: ["./assets/images/outfit_4_aurora_nocturne.jpg"],
+        sizes: ["M", "L", "XL"],
+        stock: 5,
+        sku: "LM-OU-AN02",
+        isNew: true,
+        onSale: false,
+        createdAt: "2024-03-01T10:15:00.000Z",
+      },
+      {
+        id: "prod_top_003",
+        name: "Blusa Minimalista Lumière Blanche",
+        description:
+          "Fluidez y pureza en seda crepé de alta densidad. Cuello mao sutil, puños estructurados con gemelos dorados de aleación ligera. Una prenda esencial versátil concebida para transicionar sin esfuerzo del entorno profesional al cóctel nocturno.",
+        price: 185000,
+        compareAtPrice: null,
+        category: "tops",
+        images: ["./assets/images/outfit_5_lumiere_blanche.jpg"],
+        sizes: ["S", "M", "L"],
+        stock: 25,
+        sku: "LM-TP-LB03",
+        isNew: false,
+        onSale: false,
+        createdAt: "2024-01-20T14:00:00.000Z",
+      },
+      {
+        id: "prod_acc_004",
+        name: "Bolso Estructurado Clarté Dorée",
+        description:
+          "Bolso de mano rígido esculpido en piel bovina texturizada con curtido vegetal sostenible. Herrajes con baño de oro cepillado de 14k y cierre magnético de alta precisión. Interior compartimentado forrado en gamuza suave con bolsillo secreto para tarjetas.",
+        price: 290000,
+        compareAtPrice: 340000,
+        category: "bags",
+        images: ["./assets/images/outfit_3_clarte_doree.jpg"],
+        sizes: ["Única"],
+        stock: 7,
+        sku: "LM-BG-CD04",
+        isNew: false,
+        onSale: true,
+        createdAt: "2024-02-10T09:45:00.000Z",
+      },
+      {
+        id: "prod_shoes_005",
+        name: "Botín de Tacón Rayonnée Noir",
+        description:
+          "Calzado de autor manufacturado artesanalmente en España. Cuero napa ultra suave de adaptabilidad inmediata. Tacón geométrico facetado de 7cm que brinda un soporte ergonómico inigualable sin comprometer la verticalidad vanguardista.",
+        price: 410000,
+        compareAtPrice: null,
+        category: "shoes",
+        images: ["./assets/images/outfit_6_rayonnee.jpg"],
+        sizes: ["36", "37", "38", "39"],
+        stock: 9,
+        sku: "LM-SH-RN05",
+        isNew: true,
+        onSale: false,
+        createdAt: "2024-03-10T11:20:00.000Z",
+      },
+    ];
+
+    writeAll(fallbackProducts);
+    storage.set(SEED_FLAG, true);
+    bus.emit(EVENTS.PRODUCTS_LOADED, {
+      origin: "fallback",
+      count: fallbackProducts.length,
+    });
+    return { origin: "fallback", count: fallbackProducts.length };
   },
 
-  // ── READ ────────────────────────────────────────────────────────────────────
+  // ── READ OPERATORS ──────────────────────────────────────────────────────────
 
   /**
-   * Retorna todos los productos.
-   * @returns {Object[]}
+   * Obtiene todos los productos del sistema.
+   * @returns {Object[]} Array de productos.
    */
   getAll() {
     return readAll();
   },
 
   /**
-   * Busca un producto por su ID.
+   * Busca un producto específico por su ID único.
    * @param {string} id
-   * @returns {Object|null}
+   * @returns {Object|null} El producto encontrado o null.
    */
   getById(id) {
     if (!id) return null;
-    return readAll().find((p) => p.id === id) ?? null;
+    const items = readAll();
+    return items.find((p) => p.id === id) ?? null;
   },
 
   /**
-   * Retorna productos destacados.
-   * @param {number} limit
-   * @returns {Object[]}
+   * Busca un producto por su código SKU.
+   * @param {string} sku
+   * @returns {Object|null}
    */
-  getFeatured(limit = 8) {
-    return readAll()
-      .filter((p) => p.featured)
-      .slice(0, limit);
+  getBySku(sku) {
+    if (!sku) return null;
+    const items = readAll();
+    return (
+      items.find((p) => p.sku?.toLowerCase() === sku.toLowerCase()) ?? null
+    );
   },
 
   /**
-   * Retorna productos relacionados (misma categoría, distinto ID).
-   * @param {string} productId
-   * @param {number} limit
-   * @returns {Object[]}
+   * Filtra y ordena el catálogo de productos con base en múltiples criterios.
+   * Usado fuertemente por la pantalla de catálogo / buscador general.
+   * * @param {Object} filters
+   * @param {string} [filters.category] - Categoría exacta.
+   * @param {boolean} [filters.onSale] - Filtrar solo productos en oferta.
+   * @param {boolean} [filters.isNew] - Filtrar solo novedades.
+   * @param {number} [filters.priceMin] - Rango de precio inferior.
+   * @param {number} [filters.priceMax] - Rango de precio superior.
+   * @param {string} [filters.search] - Texto libre para buscar en name o description.
+   * @param {string} [filters.size] - Filtrar si contiene una talla específica.
+   * @param {boolean} [filters.inStock] - Ocultar los que no tienen stock (stock > 0).
+   * @param {'price_asc'|'price_desc'|'newest'|'name_asc'|'relevance'} [sort='relevance'] - Criterio de ordenación.
+   * @returns {Object[]} Listado de productos filtrados y ordenados.
    */
-  getRelated(productId, limit = 4) {
-    const product = this.getById(productId);
-    if (!product) return [];
-    return readAll()
-      .filter((p) => p.id !== productId && p.category === product.category)
-      .slice(0, limit);
-  },
+  getFiltered(filters = {}, sort = "relevance") {
+    let products = readAll();
 
-  // ── SEARCH ──────────────────────────────────────────────────────────────────
-
-  /**
-   * Búsqueda full-text en name, description y tags.
-   * @param {string} query
-   * @returns {Object[]}
-   */
-  search(query) {
-    if (!query || typeof query !== "string") return readAll();
-
-    const q = query.toLowerCase().trim();
-    if (!q) return readAll();
-
-    return readAll().filter((p) => {
-      const inName = p.name.toLowerCase().includes(q);
-      const inDescription = (p.description ?? "").toLowerCase().includes(q);
-      const inTags = (p.tags ?? []).some((t) => t.toLowerCase().includes(q));
-      const inCategory = p.category.toLowerCase().includes(q);
-      return inName || inDescription || inTags || inCategory;
-    });
-  },
-
-  // ── FILTER ──────────────────────────────────────────────────────────────────
-
-  /**
-   * Filtra productos por categoría.
-   * @param {string} category
-   * @returns {Object[]}
-   */
-  filterByCategory(category) {
-    if (!category || category === "all") return readAll();
-    return readAll().filter((p) => p.category === category);
-  },
-
-  /**
-   * Filtrado avanzado con múltiples criterios.
-   * @param {Object} filters
-   * @param {string}   [filters.category]
-   * @param {string}   [filters.subcategory]
-   * @param {number}   [filters.minPrice]
-   * @param {number}   [filters.maxPrice]
-   * @param {string[]} [filters.sizes]
-   * @param {string[]} [filters.colors]
-   * @param {boolean}  [filters.inStock]
-   * @param {boolean}  [filters.onSale]
-   * @param {string[]} [filters.tags]
-   * @param {string}   [filters.sortBy]  — 'price_asc' | 'price_desc' | 'newest' | 'rating'
-   * @returns {Object[]}
-   */
-  filter(filters = {}) {
-    let results = readAll();
-
+    // Aplicar filtros cumulativos
     if (filters.category && filters.category !== "all") {
-      results = results.filter((p) => p.category === filters.category);
+      products = products.filter((p) => p.category === filters.category);
     }
 
-    if (filters.subcategory) {
-      results = results.filter((p) => p.subcategory === filters.subcategory);
+    if (filters.onSale === true || filters.onSale === "true") {
+      products = products.filter((p) => p.onSale === true);
     }
 
-    if (filters.minPrice !== undefined) {
-      results = results.filter((p) => p.price >= Number(filters.minPrice));
+    if (filters.isNew === true || filters.isNew === "true") {
+      products = products.filter((p) => p.isNew === true);
     }
 
-    if (filters.maxPrice !== undefined) {
-      results = results.filter((p) => p.price <= Number(filters.maxPrice));
+    if (filters.priceMin !== undefined && filters.priceMin !== "") {
+      const min = parseFloat(filters.priceMin);
+      if (!isNaN(min)) products = products.filter((p) => p.price >= min);
     }
 
-    if (filters.sizes?.length) {
-      results = results.filter((p) =>
-        filters.sizes.some((s) => p.sizes.includes(s)),
+    if (filters.priceMax !== undefined && filters.priceMax !== "") {
+      const max = parseFloat(filters.priceMax);
+      if (!isNaN(max)) products = products.filter((p) => p.price <= max);
+    }
+
+    if (filters.size) {
+      products = products.filter((p) => p.sizes?.includes(filters.size));
+    }
+
+    if (filters.inStock === true || filters.inStock === "true") {
+      products = products.filter((p) => p.stock > 0);
+    }
+
+    if (filters.search && filters.search.trim() !== "") {
+      const query = filters.search.toLowerCase().trim();
+      products = products.filter(
+        (p) =>
+          p.name.toLowerCase().includes(query) ||
+          p.description.toLowerCase().includes(query) ||
+          p.sku?.toLowerCase().includes(query),
       );
     }
 
-    if (filters.colors?.length) {
-      results = results.filter((p) =>
-        filters.colors.some((c) => p.colors.includes(c)),
-      );
-    }
-
-    if (filters.inStock) {
-      results = results.filter((p) => p.stock > 0);
-    }
-
-    if (filters.onSale) {
-      results = results.filter(
-        (p) => p.compareAtPrice && p.compareAtPrice > p.price,
-      );
-    }
-
-    if (filters.tags?.length) {
-      results = results.filter((p) =>
-        filters.tags.some((t) => p.tags.includes(t)),
-      );
-    }
-
-    // Ordenamiento
-    switch (filters.sortBy) {
+    // Aplicar ordenación (Sort)
+    switch (sort) {
       case "price_asc":
-        results.sort((a, b) => a.price - b.price);
+        products.sort((a, b) => a.price - b.price);
         break;
       case "price_desc":
-        results.sort((a, b) => b.price - a.price);
+        products.sort((a, b) => b.price - a.price);
         break;
       case "newest":
-        results.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         break;
-      case "rating":
-        results.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+      case "name_asc":
+        products.sort((a, b) => a.name.localeCompare(b.name));
         break;
+      case "relevance":
       default:
-        // Sin ordenamiento adicional
+        // Mantener orden predeterminado o priorizar stock
+        products.sort((a, b) => (b.stock > 0 ? 1 : 0) - (a.stock > 0 ? 1 : 0));
         break;
     }
 
-    return results;
+    return products;
   },
 
-  // ── CREATE ──────────────────────────────────────────────────────────────────
+  // ── WRITE OPERATORS (CRUD MUTATIONS) ────────────────────────────────────────
 
   /**
-   * Crea un nuevo producto.
-   * @param {Object} data
+   * Registra un nuevo producto en el catálogo.
+   * Genera IDs autonuméricos/hashes y estampa fecha de creación.
+   * @param {Object} rawData - Atributos del nuevo producto.
    * @returns {{ success: boolean, product?: Object, errors?: string[] }}
    */
-  create(data) {
-    const { valid, errors } = validate(data);
-    if (!valid) return { success: false, errors };
+  create(rawData) {
+    const validation = validate(rawData, false);
+    if (!validation.valid) {
+      return { success: false, errors: validation.errors };
+    }
 
-    const now = new Date().toISOString();
-    const product = {
-      id: generateId(),
-      name: data.name.trim(),
-      description: (data.description ?? "").trim(),
-      price: Number(data.price),
-      compareAtPrice: data.compareAtPrice ? Number(data.compareAtPrice) : null,
-      category: data.category,
-      subcategory: data.subcategory ?? null,
-      images: data.images,
-      sizes: data.sizes ?? [],
-      colors: data.colors ?? [],
-      stock: Number(data.stock ?? 0),
-      featured: Boolean(data.featured ?? false),
-      tags: data.tags ?? [],
-      rating: null,
-      reviewCount: 0,
-      sku: data.sku ?? null,
-      createdAt: now,
-      updatedAt: now,
+    const products = readAll();
+
+    // Validar unicidad de SKU si se provee
+    if (
+      rawData.sku &&
+      products.some((p) => p.sku?.toLowerCase() === rawData.sku.toLowerCase())
+    ) {
+      return {
+        success: false,
+        errors: [
+          `El código SKU '${rawData.sku}' ya está asignado a otro ítem.`,
+        ],
+      };
+    }
+
+    const newProduct = {
+      id: `prod_${rawData.category}_${Date.now()}`,
+      name: rawData.name,
+      description: rawData.description || "",
+      price: rawData.price,
+      compareAtPrice: rawData.compareAtPrice ?? null,
+      category: rawData.category,
+      images: rawData.images,
+      sizes: rawData.sizes ?? ["Única"],
+      stock: rawData.stock ?? 0,
+      sku: rawData.sku || `LM-XX-${Math.floor(Math.random() * 90000 + 10000)}`,
+      isNew: rawData.isNew ?? true,
+      onSale: rawData.compareAtPrice > rawData.price,
+      createdAt: new Date().toISOString(),
     };
 
-    const products = readAll();
-    products.push(product);
+    products.push(newProduct);
     writeAll(products);
 
-    bus.emit(EVENTS.PRODUCT_CREATED, { product });
-    return { success: true, product };
+    bus.emit(EVENTS.PRODUCT_CREATED, { product: newProduct });
+    return { success: true, product: newProduct };
   },
 
-  // ── UPDATE ──────────────────────────────────────────────────────────────────
-
   /**
-   * Actualiza un producto existente (merge parcial).
-   * @param {string} id
-   * @param {Object} data  - Campos a actualizar.
+   * Modifica los atributos de un producto existente de forma parcial (Patch).
+   * @param {string} id - Identificador del ítem a modificar.
+   * @param {Object} patchData - Campos modificados.
    * @returns {{ success: boolean, product?: Object, errors?: string[] }}
    */
-  update(id, data) {
-    if (!id) return { success: false, errors: ["ID requerido."] };
+  update(id, patchData) {
+    if (!id) return { success: false, errors: ["ID de producto inválido."] };
+
+    const validation = validate(patchData, true);
+    if (!validation.valid) {
+      return { success: false, errors: validation.errors };
+    }
 
     const products = readAll();
-    const index = products.findIndex((p) => p.id === id);
+    const idx = products.findIndex((p) => p.id === id);
+    if (idx === -1)
+      return {
+        success: false,
+        errors: ["Producto no encontrado en el sistema."],
+      };
 
-    if (index === -1)
-      return { success: false, errors: [`Producto "${id}" no encontrado.`] };
+    // Validar SKU si cambió
+    if (patchData.sku && patchData.sku !== products[idx].sku) {
+      if (
+        products.some(
+          (p) =>
+            p.sku?.toLowerCase() === patchData.sku.toLowerCase() && p.id !== id,
+        )
+      ) {
+        return {
+          success: false,
+          errors: [`El SKU '${patchData.sku}' ya se encuentra registrado.`],
+        };
+      }
+    }
 
-    const { valid, errors } = validate(data, true); // validación parcial
-    if (!valid) return { success: false, errors };
+    // Recalcular bandera onSale automáticamente si se modifican precios
+    let autoOnSale = products[idx].onSale;
+    const finalPrice =
+      patchData.price !== undefined ? patchData.price : products[idx].price;
+    const finalCompare =
+      patchData.compareAtPrice !== undefined
+        ? patchData.compareAtPrice
+        : products[idx].compareAtPrice;
 
-    // Campos protegidos que no se pueden sobreescribir externamente
-    const {
-      id: _id,
-      createdAt: _c,
-      rating: _r,
-      reviewCount: _rc,
-      ...safeData
-    } = data;
+    if (
+      patchData.price !== undefined ||
+      patchData.compareAtPrice !== undefined
+    ) {
+      autoOnSale = finalCompare !== null && finalCompare > finalPrice;
+    }
 
-    const updated = {
-      ...products[index],
-      ...safeData,
-      // Forzar tipado correcto en campos numéricos si vienen en el patch
-      ...(data.price !== undefined && { price: Number(data.price) }),
-      ...(data.compareAtPrice !== undefined && {
-        compareAtPrice: data.compareAtPrice
-          ? Number(data.compareAtPrice)
-          : null,
-      }),
-      ...(data.stock !== undefined && { stock: Number(data.stock) }),
+    const updatedProduct = {
+      ...products[idx],
+      ...patchData,
+      onSale: autoOnSale,
       updatedAt: new Date().toISOString(),
     };
 
-    products[index] = updated;
+    products[idx] = updatedProduct;
     writeAll(products);
 
-    bus.emit(EVENTS.PRODUCT_UPDATED, { product: updated });
-    return { success: true, product: updated };
+    bus.emit(EVENTS.PRODUCT_UPDATED, { product: updatedProduct });
+    return { success: true, product: updatedProduct };
   },
 
-  // ── DELETE ──────────────────────────────────────────────────────────────────
-
   /**
-   * Elimina un producto por ID.
+   * Remueve físicamente un producto del inventario mediante su ID.
    * @param {string} id
-   * @returns {{ success: boolean, errors?: string[] }}
+   * @returns {boolean} True si fue eliminado con éxito.
    */
   delete(id) {
-    if (!id) return { success: false, errors: ["ID requerido."] };
-
+    if (!id) return false;
     const products = readAll();
-    const index = products.findIndex((p) => p.id === id);
+    const initialLength = products.length;
 
-    if (index === -1)
-      return { success: false, errors: [`Producto "${id}" no encontrado.`] };
+    const filtered = products.filter((p) => p.id !== id);
+    if (filtered.length === initialLength) return false;
 
-    const [removed] = products.splice(index, 1);
-    writeAll(products);
-
-    bus.emit(EVENTS.PRODUCT_DELETED, { id, product: removed });
-    return { success: true };
+    writeAll(filtered);
+    bus.emit(EVENTS.PRODUCT_DELETED, { productId: id });
+    return true;
   },
 
-  // ── STOCK ───────────────────────────────────────────────────────────────────
+  // ── STOCK STOCK MANAGEMENT ──────────────────────────────────────────────────
 
   /**
-   * Decrementa el stock de un producto (usado en checkout).
-   * @param {string} id
-   * @param {number} qty
+   * Reduce el stock físico tras la consolidación de un pedido de compra.
+   * @param {string} id - ID del producto.
+   * @param {number} qty - Cantidad comprada a deducir.
    * @returns {{ success: boolean, stock?: number, errors?: string[] }}
    */
   decrementStock(id, qty = 1) {
@@ -531,16 +551,13 @@ const ProductService = {
     return VALID_CATEGORIES.filter((c) => used.has(c));
   },
 
-  // ── RESET (dev/test) ────────────────────────────────────────────────────────
+  // ── RESET (dev/test environment) ───────────────────────────────────────────
 
-  /**
-   * Elimina datos y flag de seed. Re-ejecuta el seed desde el JSON.
-   * Solo útil en desarrollo.
-   */
-  async reset() {
+  /** Limpia por completo el inventario y borra banderas de inicialización. */
+  purge() {
     storage.remove(STORAGE_KEY);
     storage.remove(SEED_FLAG);
-    return this.init();
+    store.setState("products", { items: [], loaded: false });
   },
 };
 
