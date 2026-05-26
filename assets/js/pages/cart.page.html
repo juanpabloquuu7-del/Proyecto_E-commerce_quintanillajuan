@@ -1,0 +1,49 @@
+<link rel="stylesheet" href="./js/pages/css/cart.page.css" />
+
+<article class="cart-page">
+  <header class="cart-header">
+    <h1 class="cart-title">Tu Bolsa de Compra</h1>
+    <p class="cart-subtitle">Piezas seleccionadas para tu colección personal.</p>
+  </header>
+
+  <div class="cart-layout">
+    
+    <section class="cart-items-section" aria-label="Productos en el carrito">
+      <div id="cart-items-container" class="cart-items-list">
+        <p class="cart-empty-msg">Tu bolsa está vacía. Explora el catálogo para añadir piezas exclusivas.</p>
+      </div>
+    </section>
+
+    <aside class="cart-summary-box" aria-label="Resumen de precios">
+      <h2 class="summary-box-title">Resumen del Pedido</h2>
+      
+      <div class="summary-details">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="cart-subtotal">$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Envío Estimado</span>
+          <span class="shipping-status">Gratis</span>
+        </div>
+        
+        <div class="summary-divider" role="presentation"></div>
+        
+        <div class="summary-row total-main">
+          <span>Total</span>
+          <span id="cart-total">$0.00</span>
+        </div>
+      </div>
+
+      <footer class="summary-actions">
+        <button type="button" data-route="/checkout" class="btn-checkout-proceed">
+          Continuar al Pago
+        </button>
+        <button type="button" data-route="/catalog" class="btn-continue-shopping">
+          Seguir Comprando
+        </button>
+      </footer>
+    </aside>
+
+  </div>
+</article>

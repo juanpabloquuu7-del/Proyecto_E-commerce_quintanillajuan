@@ -719,11 +719,8 @@ if (typeof window !== "undefined" && window.location.hostname === "localhost") {
 export default storage;
 export {
   StorageService,
-  STORAGE_KEYS,
+  
   NAMESPACE,
   sessionStorage_ as sessionStorage,
 };
 
-// Añadir al final de storage.service.js
-export { storage, sessionStorage_ };
-export default storage;

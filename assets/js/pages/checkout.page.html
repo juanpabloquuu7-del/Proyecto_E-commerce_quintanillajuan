@@ -1,0 +1,94 @@
+<link rel="stylesheet" href="./js/pages/css/checkout.page.css" />
+
+<main class="checkout-page">
+  <header class="checkout-header">
+    <h1 class="checkout-title">Finalizar Pedido</h1>
+    <p class="checkout-subtitle">Completa tus datos para procesar tu adquisición exclusiva.</p>
+  </header>
+
+  <div class="checkout-container">
+    
+    <section class="checkout-form-wrapper" aria-labelledby="form-title">
+      <h2 id="form-title" class="sr-only">Detalles de Facturación y Pago</h2>
+      
+      <form id="checkout-form" class="checkout-form">
+        
+        <fieldset class="form-section">
+          <legend class="section-legend">1. Detalles de Envío</legend>
+          
+          <div class="form-group-inline">
+            <div class="form-group">
+              <label for="bill-firstname">Nombre</label>
+              <input type="text" id="bill-firstname" required placeholder="Juan" />
+            </div>
+            <div class="form-group">
+              <label for="bill-lastname">Apellido</label>
+              <input type="text" id="bill-lastname" required placeholder="Pablo" />
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="bill-address">Dirección de residencia</label>
+            <input type="text" id="bill-address" required placeholder="Calle, Avenida, Conjunto, Bloque o Edificio..." />
+          </div>
+          
+          <div class="form-group">
+            <label for="bill-city">Ciudad / Municipio</label>
+            <input type="text" id="bill-city" required placeholder="Bucaramanga" />
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+          <legend class="section-legend">2. Método de Pago</legend>
+          
+          <div class="payment-methods" role="radiogroup" aria-label="Opciones de pago disponibles">
+            <label class="method-option">
+              <input type="radio" name="payment-type" value="card" checked />
+              <div class="method-box">
+                <span class="method-title">Tarjeta de Crédito</span>
+              </div>
+            </label>
+            
+            <label class="method-option">
+              <input type="radio" name="payment-type" value="delivery" />
+              <div class="method-box">
+                <span class="method-title">Pago contra entrega</span>
+              </div>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-submit-order">
+            Procesar Orden Completa
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <aside class="checkout-summary" aria-label="Resumen de su bolsa de compras">
+      <h3 class="summary-title">Tu Carrito</h3>
+      
+      <div id="checkout-items-list" class="summary-items-list">
+        </div>
+
+      <div class="summary-divider" role="presentation"></div>
+
+      <footer class="summary-totals">
+        <div class="total-row">
+          <span>Subtotal</span>
+          <span id="summary-subtotal" aria-live="polite">$0.00</span>
+        </div>
+        <div class="total-row">
+          <span>Envío</span>
+          <span class="free-badge">Gratis</span>
+        </div>
+        <div class="total-row total-main">
+          <span>Total</span>
+          <span id="summary-total" aria-live="polite">$0.00</span>
+        </div>
+      </footer>
+    </aside>
+
+  </div>
+</main>

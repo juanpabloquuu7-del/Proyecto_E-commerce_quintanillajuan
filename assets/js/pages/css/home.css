@@ -1,0 +1,84 @@
+/* === FRONT E-COMMERCE: VISTA PRINCIPAL === */
+
+.shop-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+/* Hero Banner */
+.hero-banner {
+    background: linear-gradient(135deg, #111 0%, #222 100%);
+    color: #fff;
+    padding: 4rem 2rem;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 2.5rem;
+}
+
+.hero-banner h1 {
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+/* Barra de Búsqueda y Filtros */
+.search-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 1.25rem;
+    border-radius: 6px;
+    margin-bottom: 2rem;
+    border: 1px solid #e9ecef;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 280px;
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: #1a1a2e;
+}
+
+.category-filter-select {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+/* Grilla de Tarjetas Públicas */
+.products-public-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 2rem;
+}
+
+@media (max-width: 576px) {
+    .hero-banner h1 {
+        font-size: 1.8rem;
+    }
+
+    .search-filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
