@@ -206,7 +206,15 @@ const CartService = {
       return { success: true, item };
     }
   },
+  addItem(productId, qty = 1, size = null, color = null) {
+    const product = ProductService.getById(productId);
+    if (!product) {
+      return { success: false, errors: ["El producto no existe."] };
+    }
 
+    const finalSize = size ?? (product.sizes?.[0] || null);
+    return this.add(productId, qty, finalSize, color);
+  },
   // ── REMOVE ──────────────────────────────────────────────────────────────────
 
   /**

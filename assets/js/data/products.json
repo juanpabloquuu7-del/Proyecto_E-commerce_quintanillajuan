@@ -8,7 +8,7 @@
     "category": "dresses",
     "image": "./assets/js/pages/imgs/outfit_1_eclat_noir.png",
     "sizes": ["S", "M", "L"],
-    "stock": 9,
+    "stock": 0,
     "sku": "LM-DR-EN01",
     "isNew": true,
     "onSale": true,

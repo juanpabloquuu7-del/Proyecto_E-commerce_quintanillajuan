@@ -1,5 +1,4 @@
-import cartService from "js/services/cart.service.js"; // Ajusta esta ruta según tu estructura de carpetas si es necesario
-// 1. CORREGIDO: Importamos el 'bus' por defecto y las constantes 'EVENTS' desde tu archivo de eventos relacionales
+import CartService from "../services/cart.service.js";
 import bus, { EVENTS } from "../core/events.js";
 
 // 2. CORREGIDO: Agregamos 'export' aquí para que puedas importar la clase en otros archivos si lo deseas
@@ -66,9 +65,9 @@ export class ProductModal extends HTMLElement {
     if (!this.product) return;
 
     try {
-      cartService.addItem(this.product.id, 1);
+      const size = this.product.sizes?.[0] || null;
+      CartService.addItem(this.product.id, 1, size);
 
-      // ¡Ahora estas líneas ya no se romperán porque 'bus' y 'EVENTS' ya existen!
       bus.emit(EVENTS.CART_UPDATED);
 
       bus.emit(EVENTS.SHOW_TOAST, {

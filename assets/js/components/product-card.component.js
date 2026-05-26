@@ -259,8 +259,9 @@ export class LumiereProductCard extends HTMLElement {
     addCartBtn?.addEventListener("click", (e) => {
       e.stopPropagation();
 
-      // Añadimos el producto usando el servicio del negocio
-      CartService.addItem(this._product.id, 1);
+      const defaultSize = this._product.sizes?.[0] || null;
+      const result = CartService.addItem(this._product.id, 1, defaultSize);
+      if (!result.success) return;
 
       // Notificamos opcionalmente mediante el bus para lanzar una alerta visual (toast)
       bus.emit(EVENTS.CART_UPDATED, {
