@@ -1,0 +1,224 @@
+{
+    "cart": {
+        "items": [],
+        "total": 0,
+        "count": 0,
+        "subtotal": 0,
+        "savings": 0
+    },
+    "filters": {
+        "category": "all",
+        "search": "",
+        "sort": "relevance",
+        "onSale": false
+    },
+    "wishlist": {
+        "items": []
+    },
+    "orders": [
+        {
+            "id": "LMR-8NBRRFQVF-9365",
+            "items": [
+                {
+                    "key": "3::Única::",
+                    "productId": "3",
+                    "quantity": 1,
+                    "size": "Única",
+                    "color": null,
+                    "price": 300000,
+                    "compareAtPrice": null,
+                    "name": "Clarté Dorée",
+                    "image": "./assets/js/pages/imgs/outfit_3_clarte_doree.png",
+                    "slug": "3",
+                    "addedAt": "2026-06-01T21:10:02.669Z",
+                    "updatedAt": "2026-06-01T21:10:02.669Z"
+                }
+            ],
+            "shippingAddress": {
+                "firstName": "juan",
+                "lastName": "dadsa",
+                "address": "dasdsadas",
+                "city": "sdsada",
+                "phone": "3216871995",
+                "email": "fdwad@gmail.com"
+            },
+            "paymentMethod": "delivery",
+            "subtotal": 300000,
+            "shippingCost": 0,
+            "total": 300000,
+            "status": "Procesado con Éxito",
+            "createdAt": "2026-06-01T21:10:19.365Z"
+        },
+        {
+            "id": "LMR-D5RWJ7J9B-7710",
+            "items": [
+                {
+                    "key": "2::S::",
+                    "productId": "2",
+                    "quantity": 1,
+                    "size": "S",
+                    "color": null,
+                    "price": 275000,
+                    "compareAtPrice": 320000,
+                    "name": "Ombre Lumière",
+                    "image": "./assets/js/pages/imgs/outfit_2_ombre_lumiere.png",
+                    "slug": "2",
+                    "addedAt": "2026-06-01T20:34:22.349Z",
+                    "updatedAt": "2026-06-01T20:34:22.349Z"
+                }
+            ],
+            "shippingAddress": {
+                "firstName": "juan",
+                "lastName": "dadsa",
+                "address": "dasdsadas",
+                "city": "sdsada",
+                "phone": "3216871995",
+                "email": "fdwad@gmail.com"
+            },
+            "paymentMethod": "card",
+            "subtotal": 275000,
+            "shippingCost": 0,
+            "total": 275000,
+            "status": "Procesado con Éxito",
+            "createdAt": "2026-06-01T20:34:47.710Z"
+        }
+    ],
+    "products": {
+        "items": [
+            {
+                "id": 1,
+                "name": "Eclat Noir",
+                "description": "Look minimalista con silueta estructurada y acabado premium.",
+                "price": 250000,
+                "compareAtPrice": 290000,
+                "category": "dresses",
+                "image": "./assets/js/pages/imgs/outfit_1_eclat_noir.png",
+                "sizes": [
+                    "S",
+                    "M",
+                    "L"
+                ],
+                "stock": 0,
+                "sku": "LM-DR-EN01",
+                "isNew": true,
+                "onSale": true,
+                "createdAt": "2026-05-01T10:00:00.000Z",
+                "images": [
+                    "./assets/js/pages/imgs/outfit_1_eclat_noir.png"
+                ]
+            },
+            {
+                "id": 2,
+                "name": "Ombre Lumière",
+                "description": "Prenda exclusiva con caída fluida y textura sofisticada.",
+                "price": 275000,
+                "compareAtPrice": 320000,
+                "category": "tops",
+                "image": "./assets/js/pages/imgs/outfit_2_ombre_lumiere.png",
+                "sizes": [
+                    "S",
+                    "M",
+                    "L",
+                    "XL"
+                ],
+                "stock": 7,
+                "sku": "LM-TP-OL02",
+                "isNew": false,
+                "onSale": true,
+                "createdAt": "2026-04-20T09:30:00.000Z",
+                "images": [
+                    "./assets/js/pages/imgs/outfit_2_ombre_lumiere.png"
+                ]
+            },
+            {
+                "id": 3,
+                "name": "Clarté Dorée",
+                "description": "Bolso estructurado con detalles dorados y acabado artesanal.",
+                "price": 300000,
+                "compareAtPrice": null,
+                "category": "bags",
+                "image": "./assets/js/pages/imgs/outfit_3_clarte_doree.png",
+                "sizes": [
+                    "Única"
+                ],
+                "stock": 11,
+                "sku": "LM-BG-CD03",
+                "isNew": false,
+                "onSale": false,
+                "createdAt": "2026-03-12T12:00:00.000Z",
+                "images": [
+                    "./assets/js/pages/imgs/outfit_3_clarte_doree.png"
+                ]
+            },
+            {
+                "id": 4,
+                "name": "Aurora Nocturne",
+                "description": "Abrigo elegante para looks urbanos y sofisticados.",
+                "price": 285000,
+                "compareAtPrice": 330000,
+                "category": "outerwear",
+                "image": "./assets/js/pages/imgs/outfit_4_aurora_nocturne.png",
+                "sizes": [
+                    "M",
+                    "L",
+                    "XL"
+                ],
+                "stock": 5,
+                "sku": "LM-OU-AN04",
+                "isNew": true,
+                "onSale": true,
+                "createdAt": "2026-05-10T15:45:00.000Z",
+                "images": [
+                    "./assets/js/pages/imgs/outfit_4_aurora_nocturne.png"
+                ]
+            },
+            {
+                "id": 5,
+                "name": "Lumière Blanche",
+                "description": "Blusa de seda con corte moderno y tono etéreo.",
+                "price": 260000,
+                "compareAtPrice": null,
+                "category": "tops",
+                "image": "./assets/js/pages/imgs/outfit_5_lumiere_blanche.png",
+                "sizes": [
+                    "S",
+                    "M",
+                    "L"
+                ],
+                "stock": 8,
+                "sku": "LM-TP-LB05",
+                "isNew": true,
+                "onSale": false,
+                "createdAt": "2026-05-18T08:20:00.000Z",
+                "images": [
+                    "./assets/js/pages/imgs/outfit_5_lumiere_blanche.png"
+                ]
+            },
+            {
+                "id": 6,
+                "name": "Rayonnée",
+                "description": "Calzado de autor con acabado premium y silueta sofisticada.",
+                "price": 310000,
+                "compareAtPrice": 350000,
+                "category": "shoes",
+                "image": "./assets/js/pages/imgs/outfit_6_rayonnee.png",
+                "sizes": [
+                    "36",
+                    "37",
+                    "38",
+                    "39"
+                ],
+                "stock": 6,
+                "sku": "LM-SH-RN06",
+                "isNew": false,
+                "onSale": true,
+                "createdAt": "2026-05-22T11:10:00.000Z",
+                "images": [
+                    "./assets/js/pages/imgs/outfit_6_rayonnee.png"
+                ]
+            }
+        ],
+        "loaded": true,
+        "updatedAt": "2026-06-01T21:11:42.162Z"
+    }
+}

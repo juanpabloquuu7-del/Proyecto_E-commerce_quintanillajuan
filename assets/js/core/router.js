@@ -22,6 +22,7 @@ const ROUTES = {
   "/admin/categories": "./assets/js/pages/admin-categories.page.html",
   "/admin/products": "./assets/js/pages/admin-products.page.html",
   "/admin/orders": "./assets/js/pages/admin-orders.page.html",
+  "/report": "./examen/reportes.html",
 };
 
 function formatCop(value) {

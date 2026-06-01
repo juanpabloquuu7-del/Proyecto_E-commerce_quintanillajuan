@@ -21,6 +21,7 @@ const NAV_LINKS = [
   { label: "Novedades", path: "/catalog?sort=newest" },
   { label: "Ofertas", path: "/catalog?onSale=true" },
   { label: "Panel Admin", path: "/admin/login" },
+  { label: "reportes ventas", path: "/report" }
 ];
 
 // ───────── Estilos Shadow DOM ──────────────────────────────────────────────

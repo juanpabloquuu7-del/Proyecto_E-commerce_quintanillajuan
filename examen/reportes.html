@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="reporte.json">
+<section class="admin-page">
+  <div class="admin-page-header">
+    <div>
+      <p class="hero-tag">Operación</p>
+      <h1>Pedidos y seguimiento</h1>
+      <p class="admin-lead">
+        Revisa pedidos cerrados, confirma entregas y revisa el detalle de cada compra con el estado actual.
+      </p>
+    </div>
+    <div class="admin-actions">
+      <button type="button" class="btn-secondary" data-route="/admin/dashboard">Volver al dashboard</button>
+    </div>
+  </div>
+
+  <div id="orders-summary" class="metrics-grid"></div>
+
+  <div class="admin-grid-two">
+    <div class="admin-card">
+      <div class="card-title-row">
+        <div>
+          <p class="hero-tag">Historial</p>
+          <h2>Órdenes registradas</h2>
+        </div>
+      </div>
+      <div class="table-shell">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="admin-orders-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <aside class="admin-card">
+      <div class="card-title-row">
+        <div>
+          <p class="hero-tag">Detalle</p>
+          <h2>Información del pedido</h2>
+        </div>
+      </div>
+      <div id="admin-order-detail" class="admin-detail-panel"></div>
+    </aside>
+  </div>
+</section>
+<script type="module" src="/assets/js/app/app.js"></script>
