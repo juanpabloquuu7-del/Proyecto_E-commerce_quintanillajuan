@@ -4,6 +4,8 @@
 
 Esta aplicación es una tienda e-commerce de moda premium construida con JavaScript moderno y arquitectura basada en componentes y servicios.
 
+https://juanpabloquuu7-del.github.io/Proyecto_E-commerce_quintanillajuan/#/
+
 La página usa enrutamiento hash (`window.location.hash`) para cargar vistas HTML desde `assets/js/pages/*.page.html` y controla:
 - Catálogo de productos
 - Página de detalle de producto
