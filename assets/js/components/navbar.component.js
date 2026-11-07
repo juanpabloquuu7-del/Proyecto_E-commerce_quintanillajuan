@@ -112,7 +112,7 @@ const STYLES = `
     justify-content: center;
   }
 
-  /* Bar de bÃºsqueda desplegable */
+  /* Bar de búsqueda desplegable */
   .search-bar {
     position: absolute;
     top: 100%;
@@ -145,7 +145,7 @@ const STYLES = `
     border-color: var(--color-accent, #c9a96e);
   }
 
-  /* MenÃº MÃ³vil */
+  /* Menú Móvil */
   .hamburger {
     display: none;
   }
@@ -185,13 +185,13 @@ export class LumiereNavbar extends HTMLElement {
   }
 
   _setupListeners() {
-    // RedirecciÃ³n del logo principal
+    // Redirección del logo principal
     this._shadow.getElementById("logo")?.addEventListener("click", (e) => {
       e.preventDefault();
       window.location.hash = "/";
     });
 
-    // DelegaciÃ³n de clics para los enlaces de navegaciÃ³n con data-route
+    // Delegación de clics para los enlaces de navegación con data-route
     this._shadow.querySelector(".nav-links")?.addEventListener("click", (e) => {
       const link = e.target.closest("[data-route]");
       if (link) {
@@ -200,12 +200,12 @@ export class LumiereNavbar extends HTMLElement {
       }
     });
 
-    // Control del botÃ³n de la bolsa/carrito lateral
+    // Control del botón de la bolsa/carrito lateral
     this._shadow.getElementById("cart-btn")?.addEventListener("click", () => {
       window.dispatchEvent(new CustomEvent("lumiere:open-cart"));
     });
 
-    // Mostrar y ocultar barra de bÃºsqueda interna
+    // Mostrar y ocultar barra de búsqueda interna
     this._shadow.getElementById("search-btn")?.addEventListener("click", () => {
       if (this._searchOpen) {
         this._closeSearch();
@@ -220,13 +220,13 @@ export class LumiereNavbar extends HTMLElement {
         this._closeSearch();
       });
 
-    // === AGREGADO: CAPTURA REACTIVA DE BÃšSQUEDA EN EL STORE ===
+    // === AGREGADO: CAPTURA REACTIVA DE BÚSQUEDA EN EL STORE ===
     const searchInput = this._shadow.getElementById("search-input");
     if (searchInput) {
       searchInput.addEventListener("input", (e) => {
         const query = e.target.value;
 
-        // Si el usuario no estÃ¡ en el catÃ¡logo y empieza a escribir, lo redirigimos automÃ¡ticamente
+        // Si el usuario no está en el catálogo y empieza a escribir, lo redirigimos automáticamente
         if (window.location.hash.split("?")[0] !== "#/catalog") {
           window.location.hash = "/catalog";
         }
@@ -240,7 +240,7 @@ export class LumiereNavbar extends HTMLElement {
     }
   }
 
-  // â”€â”€ Operaciones de BÃºsqueda â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Operaciones de Búsqueda ────────────────────────────────────────────────
 
   _openSearch() {
     this._searchOpen = true;
@@ -258,7 +258,7 @@ export class LumiereNavbar extends HTMLElement {
     if (bar) bar.classList.remove("open");
     if (input) {
       input.value = ""; // Limpiamos el texto al cerrar
-      // Limpiamos tambiÃ©n el filtro de bÃºsqueda del store
+      // Limpiamos también el filtro de búsqueda del store
       store.setState("filters", {
         ...store.getState("filters"),
         search: "",
@@ -266,7 +266,7 @@ export class LumiereNavbar extends HTMLElement {
     }
   }
 
-  // â”€â”€ Renderizado Principal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Renderizado Principal ────────────────────────────────────────────────────
 
   render() {
     const currentHash = window.location.hash || "#/";
@@ -281,11 +281,11 @@ export class LumiereNavbar extends HTMLElement {
       <style>${STYLES}</style>
       
       <nav>
-        <button id="hamburger" class="hamburger icon-btn" aria-label="MenÃº de navegaciÃ³n mÃ³vil">
+        <button id="hamburger" class="hamburger icon-btn" aria-label="Menú de navegación móvil">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
 
-        <a href="#" id="logo" class="brand">LUMIÃˆRE</a>
+        <a href="#" id="logo" class="brand">LUMIÈRE</a>
 
         <ul class="nav-links">
           ${linksHTML}
@@ -304,7 +304,7 @@ export class LumiereNavbar extends HTMLElement {
 
         <div id="search-bar" class="search-bar">
           <input type="text" id="search-input" class="search-input" placeholder="Buscar por colecciones, prendas, calzado..." />
-          <button id="close-search" class="icon-btn" aria-label="Cerrar bÃºsqueda">
+          <button id="close-search" class="icon-btn" aria-label="Cerrar búsqueda">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>
